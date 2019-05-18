@@ -65,7 +65,7 @@
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="btncreate" pref="127" max="32767" attributes="0"/>
-                      <Component id="btnviewpeople1" max="32767" attributes="0"/>
+                      <Component id="btnlogout" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -93,7 +93,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnviewpeople1" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
+                      <Component id="btnlogout" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                       <Component id="btnviewpeople" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                       <Component id="jButton5" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                   </Group>
@@ -206,7 +206,7 @@
             <Property name="text" type="java.lang.String" value="View People"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnviewpeople1">
+        <Component class="javax.swing.JButton" name="btnlogout">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Courier New" size="14" style="0"/>

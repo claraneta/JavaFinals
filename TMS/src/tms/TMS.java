@@ -17,8 +17,7 @@ public class TMS {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        signUp su = new signUp();
-        su.setVisible(true);
+        TMSController tms = new TMSController();
     }
     
 }
