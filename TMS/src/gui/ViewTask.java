@@ -92,7 +92,7 @@ public class ViewTask extends javax.swing.JFrame {
                 .addGap(21, 21, 21))
         );
 
-        jTable1.setModel(tablemodel);
+        jTable1.setModel(tableModel);
         jScrollPane1.setViewportView(jTable1);
 
         btnback.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
