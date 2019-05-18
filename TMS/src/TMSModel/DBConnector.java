@@ -86,10 +86,8 @@ public class DBConnector {
             stmt = (Statement) this.conn.createStatement();
             stmt.executeUpdate(query);
             stmt.close();
-            System.out.println("Finish");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("catch1");
         }
     }
 
@@ -139,5 +137,4 @@ public class DBConnector {
         }
     }
 
-    
 }

@@ -51,9 +51,7 @@ public class TaskModel {
     public void setTasksize(int Tasksize) {
         this.Tasksize = Tasksize;
     }
-
-   
-   
+    
     public Object[] toArray(){
         Object[] itemArr = new Object[3];
         itemArr[0] = this.getTaskID();
@@ -62,4 +60,5 @@ public class TaskModel {
         
         return itemArr;
     }
+
 }
