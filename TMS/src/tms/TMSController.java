@@ -5,6 +5,7 @@
  */
 package tms;
 
+import TMSModel.TaskModel;
 import gui.signUp;
 import gui.*;
 import java.awt.event.ActionEvent;
@@ -28,13 +29,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TMSController {
     signUp su;
-    Tasks tasks;
+    TaskModel tasks;
     dashboard db;
     AddPerson ap;
     CreateTask ct;
     ViewTask vt;
     DefaultTableModel tableModel;
-    Hashtable HT = new Hashtable<Integer, Tasks>();
+    Hashtable HT = new Hashtable<Integer, TaskModel>();
     public TMSController() {
         
     }
