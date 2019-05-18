@@ -5,6 +5,7 @@
  */
 package tms;
 
+import TMSModel.TaskModel;
 import gui.signUp;
 import gui.*;
 import guiStudent.Sdashboard;
@@ -32,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
 public class TMSController {
 
     signUp su;
-    Tasks tasks;
+    TaskModel tasks;
     dashboard db;
     AddPerson ap;
     CreateTask ct;
@@ -41,8 +42,7 @@ public class TMSController {
     Sdashboard sd;
     changePass cp;
     viewMytask vmt;
-    Hashtable HT = new Hashtable<Integer, Tasks>();
-
+    
     public TMSController() {
         su = new signUp();
         su.setVisible(true);

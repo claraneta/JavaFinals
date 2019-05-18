@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tms;
+package TMSModel;
 
 import java.awt.Image;
 
@@ -11,7 +11,7 @@ import java.awt.Image;
  *
  * @author 2ndyrGroupB
  */
-public class Tasks {
+public class TaskModel {
     
     private int TaskID;
     private String TaskName;
@@ -26,7 +26,7 @@ public class Tasks {
         return TaskID;
     }
 
-    public Tasks(int id, String name, int size) {
+    public TaskModel(int id, String name, int size) {
         this.TaskID = id;
         this.TaskName = name;
         this.Tasksize = size;
