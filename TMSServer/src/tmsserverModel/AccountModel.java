@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TMSModel;
+package tmsserverModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author 2ndyrGroupA
  */
 public class AccountModel{
-    
+
     private static final long serialVersionUID = 1L;
     private int IDAccount;
     private String username;
@@ -50,7 +50,6 @@ public class AccountModel{
         }
         return accountList;
     }
-
     public int getIDAccount() {
         return IDAccount;
     }

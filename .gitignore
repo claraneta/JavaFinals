@@ -1,2 +1,5 @@
 /TMS/build/
 /TMS/dist/
+/TMSServer/nbproject/private/
+/TMSServer/build/
+/TMSServer/dist/
