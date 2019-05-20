@@ -88,7 +88,8 @@ public class TMSController {
                                 sd.getLblname().setText(name);
                                 sd.setVisible(true);
                             }
-
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Account not found");
                         }
                     }
                     
