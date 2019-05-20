@@ -69,11 +69,10 @@ public class TMSController {
             public void actionPerformed(ActionEvent e){
                 //account = new AccountModel(su.getTfusername().getText(), su.getPfpass().getText());
                 try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
-                    writer = new ObjectOutputStream(socket.getOutputStream());
-                    writer.writeUTF("readAccounts");
-                    writer.writeUTF(su.getTfusername().getText());
-                    writer.writeUTF(su.getPfpass().getText());
-                    writer.flush();
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
+                        writer.println("readAccounts");
+                        writer.println("Select * from");
+                    }
                     
                     
                 } catch (IOException ex) {
