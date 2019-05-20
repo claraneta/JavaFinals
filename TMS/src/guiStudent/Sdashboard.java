@@ -5,6 +5,9 @@
  */
 package guiStudent;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
 /**
  *
  * @author student
@@ -18,6 +21,38 @@ public class Sdashboard extends javax.swing.JFrame {
         initComponents();
     }
 
+    public JLabel getLblname() {
+        return lblname;
+    }
+
+    public void setLblname(JLabel lblname) {
+        this.lblname = lblname;
+    }
+
+    public JButton getBtnchangepass() {
+        return btnchangepass;
+    }
+
+    public void setBtnchangepass(JButton btnchangepass) {
+        this.btnchangepass = btnchangepass;
+    }
+
+    public JButton getBtnlogout() {
+        return btnlogout;
+    }
+
+    public void setBtnlogout(JButton btnlogout) {
+        this.btnlogout = btnlogout;
+    }
+
+    public JButton getBtnviewmytask() {
+        return btnviewmytask;
+    }
+
+    public void setBtnviewmytask(JButton btnviewmytask) {
+        this.btnviewmytask = btnviewmytask;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,10 +67,10 @@ public class Sdashboard extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnlogout = new javax.swing.JButton();
+        lblname = new javax.swing.JLabel();
+        btnviewmytask = new javax.swing.JButton();
+        btnchangepass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,17 +112,17 @@ public class Sdashboard extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Courier New", 2, 18)); // NOI18N
         jLabel2.setText("Name");
 
-        jButton3.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        jButton3.setText("Log out");
+        btnlogout.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        btnlogout.setText("Log out");
 
-        jLabel3.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
-        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblname.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
+        lblname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton4.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        jButton4.setText("View My Task");
+        btnviewmytask.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        btnviewmytask.setText("View My Task");
 
-        jButton5.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        jButton5.setText("Change Password");
+        btnchangepass.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        btnchangepass.setText("Change Password");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -98,14 +133,14 @@ public class Sdashboard extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblname, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnlogout, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnchangepass)
+                    .addComponent(btnviewmytask, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(117, 117, 117))
         );
         jPanel1Layout.setVerticalGroup(
@@ -114,14 +149,14 @@ public class Sdashboard extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblname, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnviewmytask, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnchangepass, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnlogout, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
 
@@ -181,14 +216,14 @@ public class Sdashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnchangepass;
+    private javax.swing.JButton btnlogout;
+    private javax.swing.JButton btnviewmytask;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblname;
     // End of variables declaration//GEN-END:variables
 }

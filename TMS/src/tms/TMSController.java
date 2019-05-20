@@ -71,7 +71,25 @@ public class TMSController {
                 try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
                     try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
                         writer.println("readAccounts");
-                        writer.println("Select * from");
+                        writer.println("Select * from tblaccount where username = '" + su.getTfusername().getText() + "' AND password = '" 
+                        + su.getPfpass().getText() + "'");
+                        
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        String type = reader.readLine();
+                        String name = reader.readLine();
+                        String responseFromServer = reader.readLine();
+                        if(responseFromServer.equals("OK")){
+                            su.dispose();
+                            if(type.equals("1")){
+                                db = new dashboard();
+                                db.setVisible(true);
+                            }else{
+                                sd = new Sdashboard();
+                                sd.getLblname().setText(name);
+                                sd.setVisible(true);
+                            }
+
+                        }
                     }
                     
                     

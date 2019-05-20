@@ -40,7 +40,7 @@ public class TMSServerController {
         this.acceptConnections();
     }
 
-    public void acceptConnections(){
+    private void acceptConnections(){
         String response = null;
         try {
             this.ss = new ServerSocket(4000);
@@ -50,16 +50,15 @@ public class TMSServerController {
                 System.out.println("Connected with:"+sock.toString());
                 bin  = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 bon = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-                writer = new ObjectOutputStream(sock.getOutputStream());
-                reader = new ObjectInputStream(sock.getInputStream());
+                
                 //read 1st line from socket (contains method name to invoke)
-                switch(reader.readUTF()){
+                switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
 //                    case "createAccount": response =  createAccount(bin.readLine());
 //                    break;
 //                    case "createMessage": response = createMessage(bin.readLine());
 //                    break;
-                    case "readAccounts": response = readAccount(reader.readUTF(),reader.readUTF());
+                    case "readAccounts": response = readAccount(bin.readLine(),bon);
                     break;
 //                    case "readMessages": readMessages(bin.readLine());
 //                    break;
@@ -71,8 +70,9 @@ public class TMSServerController {
                     default: System.out.println("Invalid instruction.");
                 }
        
-                writer.writeUTF(response);
-                writer.close();
+                
+                bon.write(response);
+                bon.close();
                 //bon.close();            //close buffered writer object
             }
         } catch (IOException ex) {
@@ -100,41 +100,21 @@ public class TMSServerController {
 //        return response;
 //    }
 //
-    private String readAccount(String username, String password) {
+    private String readAccount(String query, BufferedWriter bon) throws IOException {
         String response = "OK";
-        System.out.println(response);
-//        am = new AccountModel(username,password);
-//        ResultSet rs;
-//        String query = "Select * from tblaccount";
-//        System.out.println(query);
-//        try {
-//            rs = dbc.select(query);
-//            if(!rs.next()){
-//                response = "Account not found !";
-//                System.out.println(response);
-//            }
-//            //this.accountsList = am.populateAccounts(rs);
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
-        //System.out.println("Initiate response: ");
-//        try {
-//            for(int i = 0; i < this.accountsList.size();i++){
-//                writer.writeObject(accountsList.get(i).getIDAccount() + "," + accountsList.get(i).getUsername()
-//                                    + "," + accountsList.get(i).getPassword() + "," + accountsList.get(i).getUsertype()
-//                                    + "\n");
-//                writer.flush();
-////                bon.write(accountsList.get(i).getIDAccount() + " | " + accountsList.get(i).getUsername()
-////                        + accountsList.get(i).getPassword() +" | "
-////                        + accountsList.get(i).getUsertype()+"\n");
-////                bon.flush();
-//            }
-//        } catch (IOException ex) {
-//                Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
-//                response = "IOException";
-//            }
+        ResultSet rs =null;
+        try {
+            rs = dbc.select(query);
+            //this.accountsList = am.populateAccounts(rs);
+            if(!rs.next()){
+                response = "Account Not found";
+            }else{
+                bon.write(Integer.toString(rs.getInt("usertype")) + "\n" + rs.getString("username") + "\n");
+                bon.flush();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return response;
     }
 //
