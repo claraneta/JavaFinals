@@ -52,6 +52,7 @@ public class TMSController {
     //tablemodels for view
     DefaultTableModel tableModel;
     DefaultTableModel tblvPeople;
+    DefaultTableModel tblTask;
     
     //staff view
     Sdashboard sd;
@@ -61,6 +62,8 @@ public class TMSController {
     //controllers
     addPersonController apc;
     viewPeopleController vpc;
+    createTaskController ctc;
+    viewTaskController vtc;
     
     //socket
     Socket soc;
@@ -88,6 +91,10 @@ public class TMSController {
         tblvPeople.addColumn("Name");
         tblvPeople.addColumn("Gender");
         tblvPeople.addColumn("Email");
+        
+        tblTask = new DefaultTableModel(0,0);
+        tblTask.addColumn("TaskName");
+        tblTask.addColumn("TaskSize");
         
         initListener();
         
@@ -167,6 +174,26 @@ public class TMSController {
                     Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            }
+        });
+        
+        db.getBtncreate().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                db.setVisible(false);
+                
+                ct = new CreateTask();
+                ctc = new createTaskController(db,ct);
+            }
+        });
+        
+        db.getBtnview().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                db.setVisible(false);
+                
+                vt = new ViewTask(tblTask);
+                vtc = new viewTaskController(db,vt,tblTask);
             }
         });
     }

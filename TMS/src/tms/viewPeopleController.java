@@ -20,6 +20,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,7 +32,7 @@ public class viewPeopleController {
     dashboard db;
     DefaultTableModel model;
     ArrayList<PersonModel> personList = new ArrayList();
-    Hashtable <Integer,String> ht = new Hashtable();
+    
     ObjectInputStream read;
     public viewPeopleController(JFrame vp, JFrame db,ArrayList personList,DefaultTableModel tbl ) throws ClassNotFoundException {
         this.model = tbl;
@@ -63,14 +64,9 @@ public class viewPeopleController {
                 writer.println("Select * from tbladdpeson");
                 personList = (ArrayList<PersonModel>) read.readObject();
                 
-                
-                
                 String response = reader.readLine();
                 
-//                switch(response){
-//                    case "OK": System.out.println("na hala");break;
-//                    default: System.out.println("nag pataka");break;
-//                }
+
                 
                 if(response.equals("OK")){
                     Object[] arr = new Object[3];
@@ -82,7 +78,7 @@ public class viewPeopleController {
                         model.addRow(arr);
                     }
                 }else{
-                    System.out.println("Pataka");
+                    JOptionPane.showMessageDialog(null, response);
                 }
             }
         }catch(IOException ex){
