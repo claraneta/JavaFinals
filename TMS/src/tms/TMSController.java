@@ -5,8 +5,9 @@
  */
 package tms;
 
-import TMSModel.AccountModel;
-import TMSModel.TaskModel;
+import Model.AccountModel;
+import Model.PersonModel;
+import Model.TaskModel;
 import gui.signUp;
 import gui.*;
 import guiStudent.Sdashboard;
@@ -31,28 +32,50 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author 2ndyrGroupB
  */
 public class TMSController {
-
+    
+    //admin view
     signUp su;
     TaskModel tasks;
     dashboard db;
     AddPerson ap;
     CreateTask ct;
     ViewTask vt;
+    viewPeople viewP;
+    
+    //tablemodels for view
     DefaultTableModel tableModel;
+    DefaultTableModel tblvPeople;
+    
+    //staff view
     Sdashboard sd;
     changePass cp;
     viewMytask vmt;
+    
+    //controllers
     addPersonController apc;
+    viewPeopleController vpc;
+    
+    //socket
     Socket soc;
+    
+    //models
     AccountModel account;
+    PersonModel person;
+    
+    //DataStreams
     ObjectOutputStream writer;
     ObjectInputStream reader;
+    
+    //Collections
+    public static ArrayList <PersonModel> Person = new ArrayList();
+    
     public TMSController() {
         su = new signUp();
         su.setVisible(true);
@@ -60,7 +83,14 @@ public class TMSController {
         tableModel.addColumn("Task ID");
         tableModel.addColumn("Task Name");
         tableModel.addColumn("Task Size");
+        
+        tblvPeople = new DefaultTableModel(0,0);
+        tblvPeople.addColumn("Name");
+        tblvPeople.addColumn("Gender");
+        tblvPeople.addColumn("Email");
+        
         initListener();
+        
     }
     
     private void initListener(){
@@ -76,11 +106,16 @@ public class TMSController {
                         + su.getPfpass().getText() + "'");
                         
                         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String type = reader.readLine();
+                        String type = reader.readLine().toString();
+                        if (type.contains("1")){
+                            type = "1";
+                        }
+                        System.out.println(type);
                         String name = reader.readLine();
                         String responseFromServer = reader.readLine();
                         if(responseFromServer.equals("OK")){
                             su.dispose();
+                            
                             if(type.equals("1")){
                                 db = new dashboard();
                                 db.setVisible(true);
@@ -115,8 +150,23 @@ public class TMSController {
             public void actionPerformed(ActionEvent e){
                 db.setVisible(false);
                 ap = new AddPerson();
-                
                 apc = new addPersonController(ap,db);
+                
+            }
+        });
+        
+        db.getBtnviewpeople().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                db.setVisible(false);
+                
+                viewP = new viewPeople(tblvPeople);
+                try {
+                    vpc = new viewPeopleController(viewP,db);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         });
     }

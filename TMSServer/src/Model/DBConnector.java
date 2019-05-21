@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tmsserverModel;
+package Model;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import java.sql.Connection;

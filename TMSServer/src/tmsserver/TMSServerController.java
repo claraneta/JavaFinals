@@ -5,7 +5,7 @@
  */
 package tmsserver;
 
-import tmsserverModel.DBConnector;
+import Model.DBConnector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -18,7 +18,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tmsserverModel.AccountModel;
+import Model.AccountModel;
+import Model.PersonModel;
 import java.io.*;
 
 /**
@@ -50,7 +51,7 @@ public class TMSServerController {
                 System.out.println("Connected with:"+sock.toString());
                 bin  = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 bon = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-                
+                writer = new ObjectOutputStream(sock.getOutputStream());
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
@@ -60,8 +61,8 @@ public class TMSServerController {
 //                    break;
                     case "readAccounts": response = readAccount(bin.readLine(),bon);
                     break;
-//                    case "readMessages": readMessages(bin.readLine());
-//                    break;
+                    case "loadPeople": loadPeople(bin.readLine(),writer);
+                    break;
 //                    case "updateAccount": updateAccount(bin.readLine());
 //                    break;
 //                    case "deleteAccount": deleteAccount(bin.readLine());
@@ -100,6 +101,31 @@ public class TMSServerController {
 //        return response;
 //    }
 //
+    private String loadPeople(String query,ObjectOutputStream writer) throws IOException {
+        String response = "OK";
+        ResultSet rs = null;
+        PersonModel person;
+        try{
+            rs = this.dbc.select(query);
+//            if(!rs.next()){
+//                response = "Access Denied";
+//            }else{
+//                System.out.println(rs.getString("Name"));
+//            }
+            while(rs.next()){
+                person = new PersonModel(rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"));
+                System.out.println(person.getName());
+                writer.writeObject(person);
+                writer.flush();
+            }
+            
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }
+        
+        return response;
+    }
+    
     private String readAccount(String query, BufferedWriter bon) throws IOException {
         String response = "OK";
         ResultSet rs =null;
@@ -146,6 +172,8 @@ public class TMSServerController {
 //        return response;
 //    }
 //    
+
+    
 
     
 }
