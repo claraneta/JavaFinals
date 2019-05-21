@@ -55,7 +55,12 @@ public class addPersonController {
             
                         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         String responseFromServer = reader.readLine();
-                        System.out.println(responseFromServer);
+                        
+                        
+                        if(responseFromServer.contains("OK")){
+                            responseFromServer = "OK";
+                        }
+                        
                         switch(responseFromServer){
                             case "OK" : JOptionPane.showMessageDialog(null, "Successfully added");clearText(); break;
                             default: JOptionPane.showMessageDialog(null, responseFromServer);                    

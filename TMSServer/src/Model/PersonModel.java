@@ -16,8 +16,10 @@ public class PersonModel implements Serializable{
     private String name;
     private String gender;
     private String email;
+    private int ID;
     
-    public PersonModel(String name, String gender, String email) {
+    public PersonModel(int ID,String name, String gender, String email) {
+        this.ID = ID;
         this.name = name;
         this.gender = gender;
         this.email = email;
@@ -45,6 +47,24 @@ public class PersonModel implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+    
+    public Object[] toArray(){
+        Object[] itemArr = new Object[4];
+        itemArr[0] = this.getID();
+        itemArr[1] = this.getName();
+        itemArr[2] = this.getGender();
+        itemArr[3] = this.getEmail();
+        
+        return itemArr;
     }
     
     

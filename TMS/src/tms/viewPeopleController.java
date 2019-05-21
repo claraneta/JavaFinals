@@ -17,7 +17,10 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,9 +29,13 @@ import javax.swing.JFrame;
 public class viewPeopleController {
     viewPeople vp;
     dashboard db;
-    
+    DefaultTableModel model;
+    ArrayList<PersonModel> personList = new ArrayList();
+    Hashtable <Integer,String> ht = new Hashtable();
     ObjectInputStream read;
-    public viewPeopleController(JFrame vp, JFrame db) throws ClassNotFoundException {
+    public viewPeopleController(JFrame vp, JFrame db,ArrayList personList,DefaultTableModel tbl ) throws ClassNotFoundException {
+        this.model = tbl;
+        this.personList = personList;
         this.vp = (viewPeople) vp;
         this.db = (dashboard) db;
         vp.setVisible(true);
@@ -47,19 +54,35 @@ public class viewPeopleController {
     }
 
     private void loadPeople() throws ClassNotFoundException {
+        model.getDataVector().clear();
         try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000 ) ){
             try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 read = new ObjectInputStream(socket.getInputStream());
                 writer.println("loadPeople");
                 writer.println("Select * from tbladdpeson");
-                PersonModel person = (PersonModel) (read.readObject());
-                System.out.println(person.getName());
+                personList = (ArrayList<PersonModel>) read.readObject();
+                
+                
+                
                 String response = reader.readLine();
                 
-                switch(response){
-                    case "OK": System.out.println("na hala");break;
-                    default: System.out.println("nag pataka");break;
+//                switch(response){
+//                    case "OK": System.out.println("na hala");break;
+//                    default: System.out.println("nag pataka");break;
+//                }
+                
+                if(response.equals("OK")){
+                    Object[] arr = new Object[3];
+                    for(int x = 0; x < personList.size(); x++){
+                        //arr[0] = personList.get(x).getID();
+                        arr[0] = personList.get(x).getName();
+                        arr[1] = personList.get(x).getGender();
+                        arr[2] = personList.get(x).getEmail();
+                        model.addRow(arr);
+                    }
+                }else{
+                    System.out.println("Pataka");
                 }
             }
         }catch(IOException ex){

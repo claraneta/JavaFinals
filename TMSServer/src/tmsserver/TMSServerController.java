@@ -34,6 +34,7 @@ public class TMSServerController {
     DBConnector dbc;
     AccountModel am;
     private  ArrayList<AccountModel> accountsList;
+    ArrayList<PersonModel> personList = new ArrayList();
     ObjectOutputStream writer;
     ObjectInputStream reader;
     public TMSServerController() {
@@ -102,6 +103,7 @@ public class TMSServerController {
 //    }
 //
     private String loadPeople(String query,ObjectOutputStream writer) throws IOException {
+        personList.clear();
         String response = "OK";
         ResultSet rs = null;
         PersonModel person;
@@ -113,11 +115,12 @@ public class TMSServerController {
 //                System.out.println(rs.getString("Name"));
 //            }
             while(rs.next()){
-                person = new PersonModel(rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"));
-                System.out.println(person.getName());
-                writer.writeObject(person);
-                writer.flush();
+                person = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"));
+                personList.add(person);
+                
             }
+            writer.writeObject(personList);
+            writer.flush();
             
         }catch(SQLException ex){
             System.out.println(ex);

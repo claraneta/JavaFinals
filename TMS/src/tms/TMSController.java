@@ -74,7 +74,7 @@ public class TMSController {
     ObjectInputStream reader;
     
     //Collections
-    public static ArrayList <PersonModel> Person = new ArrayList();
+    public static ArrayList <PersonModel> personList = new ArrayList() ;
     
     public TMSController() {
         su = new signUp();
@@ -110,7 +110,7 @@ public class TMSController {
                         if (type.contains("1")){
                             type = "1";
                         }
-                        System.out.println(type);
+                        
                         String name = reader.readLine();
                         String responseFromServer = reader.readLine();
                         if(responseFromServer.equals("OK")){
@@ -162,7 +162,7 @@ public class TMSController {
                 
                 viewP = new viewPeople(tblvPeople);
                 try {
-                    vpc = new viewPeopleController(viewP,db);
+                    vpc = new viewPeopleController(viewP,db,personList,tblvPeople);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
                 }
