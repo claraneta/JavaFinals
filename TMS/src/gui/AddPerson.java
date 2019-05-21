@@ -123,6 +123,11 @@ public class AddPerson extends javax.swing.JFrame {
 
         btnback.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         btnback.setText("Back");
+        btnback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -200,6 +205,10 @@ public class AddPerson extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbackActionPerformed
+        
+    }//GEN-LAST:event_btnbackActionPerformed
 
     /**
      * @param args the command line arguments

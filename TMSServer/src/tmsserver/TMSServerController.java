@@ -5,7 +5,7 @@
  */
 package tmsserver;
 
-import chateeserver.DBConnector;
+import tmsserverModel.DBConnector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -54,8 +54,8 @@ public class TMSServerController {
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
-//                    case "createAccount": response =  createAccount(bin.readLine());
-//                    break;
+                    case "addPerson": response =  addPerson(bin.readLine());
+                    break;
 //                    case "createMessage": response = createMessage(bin.readLine());
 //                    break;
                     case "readAccounts": response = readAccount(bin.readLine(),bon);
@@ -117,6 +117,16 @@ public class TMSServerController {
         }
         return response;
     }
+    
+    private String addPerson(String query) {
+        String response = "OK";
+        try{
+            this.dbc.insert(query);
+        }catch (SQLException ex){
+            response = "Adding Person Denied";
+        }
+        return response;
+    }
 //
 //    private String readMessages(String query) {
 //        String response = null;
@@ -136,4 +146,6 @@ public class TMSServerController {
 //        return response;
 //    }
 //    
+
+    
 }

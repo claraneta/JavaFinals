@@ -48,6 +48,7 @@ public class TMSController {
     Sdashboard sd;
     changePass cp;
     viewMytask vmt;
+    addPersonController apc;
     Socket soc;
     AccountModel account;
     ObjectOutputStream writer;
@@ -83,6 +84,7 @@ public class TMSController {
                             if(type.equals("1")){
                                 db = new dashboard();
                                 db.setVisible(true);
+                                dbinitListener();
                             }else{
                                 sd = new Sdashboard();
                                 sd.getLblname().setText(name);
@@ -95,9 +97,32 @@ public class TMSController {
                     
                     
                 } catch (IOException ex) {
-                    
+                    System.out.println(ex);
                 }
-                System.out.println(su.getPfpass().getText());
+                
+
+            }
+
+            
+        });
+        
+    }
+    
+    private void dbinitListener() {
+        
+        db.getBtnaddpeople().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                db.setVisible(false);
+                ap = new AddPerson();
+                
+                apc = new addPersonController(ap,db);
+            }
+        });
+    }
+    
+
+}
 //                if("staff".equals(su.getTfusername().getText()) && "staff".equals(su.getPfpass().getText())){
 //                    System.out.println("Successfully logged in");
 //                    su.dispose();
@@ -181,10 +206,3 @@ public class TMSController {
 //                    JOptionPane.showMessageDialog(null, "Incorrect Credentials");
 //                }
 //               
-            }
-        });
-        
-    }   
-    
-
-}
