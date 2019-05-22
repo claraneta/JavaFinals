@@ -7,6 +7,7 @@ package tms;
 
 import Model.TaskModel;
 import gui.CreateTask;
+import gui.UpdateTask2;
 import gui.ViewTask;
 import gui.dashboard;
 import java.awt.event.ActionEvent;
@@ -34,9 +35,11 @@ public class viewTaskController {
     DefaultTableModel model;
     ArrayList <TaskModel> taskList = new ArrayList();
     ObjectInputStream read;
-    CreateTask ct;
-    viewTaskController(dashboard db, ViewTask vt, DefaultTableModel tblTask,CreateTask ct) {
-        this.ct = ct;
+    UpdateTask2 ut;
+    updateTaskController utc;
+    private String  selectedrowid;
+    viewTaskController(dashboard db, ViewTask vt, DefaultTableModel tblTask,UpdateTask2 ut) {
+        this.ut = ut;
         this.db = db;
         this.vt = vt;
         this.model = tblTask;
@@ -94,7 +97,19 @@ public class viewTaskController {
             @Override
             public void actionPerformed(ActionEvent e){
                 
-                ct.setVisible(true);
+                if(vt.getjTable1().getSelectedRow() < 0){
+                    JOptionPane.showMessageDialog(null, "Select a row to update");
+                }else{
+                    vt.dispose();
+                    selectedrowid = Integer.toString(taskList.get(vt.getjTable1().getSelectedRow()).getTaskID());
+                    
+                    String taskname = model.getValueAt(vt.getjTable1().getSelectedRow(), 0).toString();
+                    String size = model.getValueAt(vt.getjTable1().getSelectedRow(), 1).toString();
+
+                    utc = new updateTaskController(ut,vt,taskname,size,selectedrowid);
+                }
+                
+                
             }
         });
         
@@ -102,6 +117,7 @@ public class viewTaskController {
     }
 
     private void loadTasks() {
+        model.getDataVector().clear();
         try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
             try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

@@ -20,6 +20,14 @@ public class dashboard extends javax.swing.JFrame {
         initComponents();
     }
 
+    public JButton getBtnassign() {
+        return btnassign;
+    }
+
+    public void setBtnassign(JButton btnassign) {
+        this.btnassign = btnassign;
+    }
+    
     public JButton getBtnaddpeople() {
         return btnaddpeople;
     }
@@ -73,7 +81,7 @@ public class dashboard extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         btncreate = new javax.swing.JButton();
         btnaddpeople = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnassign = new javax.swing.JButton();
         btnview = new javax.swing.JButton();
         btnviewpeople = new javax.swing.JButton();
         btnlogout = new javax.swing.JButton();
@@ -123,8 +131,8 @@ public class dashboard extends javax.swing.JFrame {
         btnaddpeople.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         btnaddpeople.setText("Add Person");
 
-        jButton5.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        jButton5.setText("Assign Task Members");
+        btnassign.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        btnassign.setText("Assign Task Members");
 
         btnview.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         btnview.setText("View Task Summary");
@@ -151,7 +159,7 @@ public class dashboard extends javax.swing.JFrame {
                     .addComponent(btnviewpeople))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnassign, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
@@ -168,7 +176,7 @@ public class dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnlogout, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnviewpeople, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnassign, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
@@ -229,12 +237,12 @@ public class dashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnaddpeople;
+    private javax.swing.JButton btnassign;
     private javax.swing.JButton btncreate;
     private javax.swing.JButton btnlogout;
     private javax.swing.JButton btnview;
     private javax.swing.JButton btnviewpeople;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;

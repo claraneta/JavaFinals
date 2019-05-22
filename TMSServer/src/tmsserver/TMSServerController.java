@@ -71,44 +71,23 @@ public class TMSServerController {
                     break;
                     case "deleteTask": response = deleteTask(bin.readLine());
                     break;
-//                    case "updateAccount": updateAccount(bin.readLine());
-//                    break;
-//                    case "deleteAccount": deleteAccount(bin.readLine());
-//                    break;
-                    case "Hi": System.out.println("I got you client");break;
+                    case "updateTask" : response = updateTask(bin.readLine());
+                    break;
+                   
                     default: System.out.println("Invalid instruction.");
                 }
        
                 
                 bon.write(response);
                 bon.close();
-                //bon.close();            //close buffered writer object
+                
             }
         } catch (IOException ex) {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-//    private String createAccount(String query) {
-//        String response = "OK";
-//        try {
-//            this.dbc.insert(query);
-//        }catch(SQLException e){
-//            response = "SQL Exception";
-//        }
-//        return response;
-//    }
-//
-//    private String createMessage(String query) {
-//        String response = "OK";
-//        try{
-//            this.dbc.insert(query);
-//        }catch(SQLException e){
-//            response = "SQL Exception";
-//        }
-//        return response;
-//    }
-//
+
     
     
     private String loadTasks(String query, ObjectOutputStream writer) throws IOException{
@@ -180,6 +159,16 @@ public class TMSServerController {
         }catch (SQLException ex){
             response = "Deleting Task Denied";
             
+        }
+        return response;
+    }
+    
+    private String updateTask(String query){
+        String response = "OK";
+        try{
+            this.dbc.update(query);
+        }catch(SQLException ex){
+            response = "Updating Task Denied";
         }
         return response;
     }

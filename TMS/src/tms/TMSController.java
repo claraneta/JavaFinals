@@ -8,11 +8,8 @@ package tms;
 import Model.AccountModel;
 import Model.PersonModel;
 import Model.TaskModel;
-import gui.signUp;
 import gui.*;
-import guiStudent.Sdashboard;
-import guiStudent.changePass;
-import guiStudent.viewMytask;
+import guiStudent.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -48,6 +45,7 @@ public class TMSController {
     CreateTask ct;
     ViewTask vt;
     viewPeople viewP;
+    UpdateTask2 ut;
     
     //tablemodels for view
     DefaultTableModel tableModel;
@@ -140,11 +138,9 @@ public class TMSController {
                     
                 } catch (IOException ex) {
                     System.out.println(ex);
-                }
-                
+                }  
 
             }
-
             
         });
         
@@ -190,96 +186,18 @@ public class TMSController {
         db.getBtnview().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                db.setVisible(false);
-                ct = new CreateTask();
+                ut = new UpdateTask2();
                 vt = new ViewTask(tblTask);
-                vtc = new viewTaskController(db,vt,tblTask,ct);
+                vtc = new viewTaskController(db,vt,tblTask,ut);
+            }
+        });
+        
+        db.getBtnassign().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                
             }
         });
     }
     
-
 }
-//                if("staff".equals(su.getTfusername().getText()) && "staff".equals(su.getPfpass().getText())){
-//                    System.out.println("Successfully logged in");
-//                    su.dispose();
-//                    db = new dashboard();
-//                    db.setVisible(true);
-//                    
-//                    db.getBtnaddpeople().addActionListener(new ActionListener(){
-//                        @Override
-//                        public void actionPerformed(ActionEvent e){
-//                            db.setVisible(false);
-//                            
-//                            ap = new AddPerson();
-//                            ap.setVisible(true);
-//                            
-//                            ap.getBtnadd().addActionListener(new ActionListener(){
-//                                @Override
-//                                public void actionPerformed(ActionEvent e){
-//                                    if(ap.getTfemail().getText().equals("")){
-//                                        JOptionPane.showMessageDialog(null, "Please input all fields");
-//                                    }else{
-//                                        ap.setVisible(false);
-//                                        db.setVisible(true);
-//                                    }
-//                                }
-//                            });
-//                            
-//                            ap.getBtnback().addActionListener(new ActionListener(){
-//                                @Override
-//                                public void actionPerformed(ActionEvent e){
-//                                    ap.dispose();
-//                                    db.setVisible(true);
-//                                }
-//                            });
-//                        }
-//                    });
-//                    
-//                    db.getBtncreate().addActionListener(new ActionListener(){
-//                        @Override
-//                        public void actionPerformed(ActionEvent e){
-//                            db.setVisible(false);
-//                            
-//                            ct = new CreateTask();
-//                            ct.setVisible(true);
-//                            
-//                            ct.getBtncreatetask().addActionListener(new ActionListener(){
-//                                @Override
-//                                public void actionPerformed(ActionEvent e){
-//                                    if(ct.getTftaskname().getText().equals("") && ct.getTftasksize().getText().equals("")){
-//                                        JOptionPane.showMessageDialog(null, "Please input all fields");
-//                                    }else{
-//                                        //Give the data to the server
-//                                        ct.setVisible(false);
-//                                        db.setVisible(true);
-//                                    }
-//                                }
-//                            });
-//                            
-//                            ct.getBtnback().addActionListener(new ActionListener(){
-//                                @Override
-//                                public void actionPerformed(ActionEvent e){
-//                                    ct.dispose();
-//                                    db.setVisible(true);
-//                                }
-//                            });
-//                        }
-//                    });
-//                    
-//                    db.getBtnview().addActionListener(new ActionListener(){
-//                        @Override
-//                        public void actionPerformed(ActionEvent e){
-//                            
-//                        }
-//                    });
-//                    
-//                }
-//                else if(su.getTfusername().equals("student") && su.getPfpass().getText().equals("student")){
-//                    su.dispose();
-//                    
-//                    sd = new Sdashboard();
-//                }else{
-//                    JOptionPane.showMessageDialog(null, "Incorrect Credentials");
-//                }
-//               

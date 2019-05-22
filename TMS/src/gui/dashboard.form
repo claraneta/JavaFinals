@@ -74,7 +74,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jButton5" max="32767" attributes="0"/>
+                      <Component id="btnassign" max="32767" attributes="0"/>
                       <Component id="btnview" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="31" max="32767" attributes="0"/>
@@ -95,7 +95,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnlogout" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                       <Component id="btnviewpeople" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
-                      <Component id="jButton5" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
+                      <Component id="btnassign" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="49" max="32767" attributes="0"/>
               </Group>
@@ -182,7 +182,7 @@
             <Property name="text" type="java.lang.String" value="Add Person"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton5">
+        <Component class="javax.swing.JButton" name="btnassign">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Courier New" size="14" style="0"/>
