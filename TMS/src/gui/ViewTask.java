@@ -84,7 +84,7 @@ public class ViewTask extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("View Task Summary");
+        jLabel3.setText("View Task Details");
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tms_small.png"))); // NOI18N
 

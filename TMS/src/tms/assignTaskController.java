@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import Model.*;
 
 /**
  *
@@ -33,10 +35,19 @@ public class assignTaskController {
     dashboard db;
     ArrayList <PersonModel> personList;
     ArrayList <TaskModel> taskList;
+    ArrayList <TaskMemberModel> memberList;
+    
     ObjectInputStream read;
     PersonModel person;
     DefaultTableModel model;
     private String taskSize;
+    
+    ObjectOutputStream writer;
+    ObjectInputStream reader;
+    
+    TaskMemberModel membermodel;
+    
+    
     assignTaskController(dashboard db, AssignTask at,DefaultTableModel model) throws ClassNotFoundException {
         this.model = model;
         this.db = db;
@@ -55,7 +66,7 @@ public class assignTaskController {
                 arr[0] = at.getCmbMember().getItemAt(at.getCmbMember().getSelectedIndex());
                 String name = arr[0].toString();
                 arr[1] = getSex(name);
-                System.out.println(model.getRowCount());
+                
                 if(model.getRowCount() + 1 > Integer.parseInt(taskSize)){
                     JOptionPane.showMessageDialog(null, "Number of members in this task is only " + taskSize);
                 }else{
@@ -85,6 +96,69 @@ public class assignTaskController {
                 
             }
         });
+        
+        at.getBtnsubmit().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String personId;
+                String personName;
+                String taskID;
+                String taskname = at.getCmbtaskname().getSelectedItem().toString();
+                for(int x = 0; x < model.getRowCount(); x++ ){
+                    //membermodel = new TaskMemberModel()
+                    String personname = model.getValueAt(x, 0).toString();
+                    
+                    personId = Integer.toString(personID(personname));
+                    personName = personname(personname);
+                    taskID = Integer.toString(taskID(taskname));
+                    
+                    membermodel = new TaskMemberModel(Integer.parseInt(personId), personName, Integer.parseInt(taskID));
+                    memberList.add(membermodel);
+                    
+                }
+                
+                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+                    writer.writeUTF("insertMembers");
+                    writer = new ObjectOutputStream(socket.getOutputStream());
+                    
+                    writer.writeObject(memberList);
+                }catch(IOException ex){
+                    
+                }
+            }
+        });
+    }
+    
+    private int taskID(String name){
+        int ID = 0;
+        
+        for(int x = 0; x < taskList.size(); x++){
+            if(taskList.get(x).getTaskName().equals(name) ){
+               ID = taskList.get(x).getTaskID();
+            }
+        }
+   
+        return ID;
+    }
+    
+    private String personname(String name){
+        String pname ="";
+        for(int x = 0; x < personList.size(); x++){
+            if(personList.get(x).getName().equals(name) ){
+               pname = personList.get(x).getName();
+            }
+        }
+        return pname;
+    }
+    
+    private int personID(String name){
+        int ID = 0;
+        for(int x = 0; x < personList.size(); x++){
+            if(personList.get(x).getName().equals(name) ){
+                ID = personList.get(x).getID();
+            }
+        }
+        return ID;
     }
     
     private String getSex(String name){

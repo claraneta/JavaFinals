@@ -22,6 +22,7 @@ import Model.AccountModel;
 import Model.PersonModel;
 import Model.TaskModel;
 import java.io.*;
+import Model.TaskMemberModel;
 
 /**
  *
@@ -37,7 +38,7 @@ public class TMSServerController {
     private  ArrayList<AccountModel> accountsList;
     ArrayList<PersonModel> personList = new ArrayList();
     ArrayList<TaskModel> taskList = new ArrayList();
-    
+    ArrayList<TaskMemberModel> memberList = new ArrayList();
     ObjectOutputStream writer;
     ObjectInputStream reader;
     public TMSServerController() {
@@ -56,6 +57,7 @@ public class TMSServerController {
                 bin  = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 bon = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
                 writer = new ObjectOutputStream(sock.getOutputStream());
+                reader = new ObjectInputStream(sock.getInputStream());
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
@@ -76,6 +78,10 @@ public class TMSServerController {
                    
                     default: System.out.println("Invalid instruction.");
                 }
+                
+//                switch(reader.readUTF()){
+//                    case "insertMembers" : response = insertMembers( (memberList)reader.readObject() );break;
+//                }
        
                 
                 bon.write(response);
