@@ -43,10 +43,14 @@ public class TMSServerController {
     ObjectInputStream reader;
     public TMSServerController() {
         this.dbc = new DBConnector();   //instantiate DBConnector
-        this.acceptConnections();
+        try {
+            this.acceptConnections();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void acceptConnections(){
+    private void acceptConnections() throws ClassNotFoundException{
         String response = null;
         try {
             this.ss = new ServerSocket(4000);
@@ -57,7 +61,7 @@ public class TMSServerController {
                 bin  = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 bon = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
                 writer = new ObjectOutputStream(sock.getOutputStream());
-                reader = new ObjectInputStream(sock.getInputStream());
+                
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
@@ -75,14 +79,10 @@ public class TMSServerController {
                     break;
                     case "updateTask" : response = updateTask(bin.readLine());
                     break;
-                   
+                    case "insertMembers" : System.out.println("Makainsert na unta");reader = new ObjectInputStream(sock.getInputStream());response = insertMembers((ArrayList<TaskMemberModel>)reader.readObject());
+                    break;
                     default: System.out.println("Invalid instruction.");
                 }
-                
-//                switch(reader.readUTF()){
-//                    case "insertMembers" : response = insertMembers( (memberList)reader.readObject() );break;
-//                }
-       
                 
                 bon.write(response);
                 bon.close();
@@ -94,7 +94,26 @@ public class TMSServerController {
     }
 
 
-    
+    private String insertMembers(ArrayList memberList ){
+        String response = "OK";
+        this.memberList = memberList;
+        if(!this.memberList.isEmpty()){
+            
+            for(int x = 0; x < this.memberList.size(); x++){
+                String personId = Integer.toString(this.memberList.get(x).getPersonID());
+                String taskId = Integer.toString(this.memberList.get(x).getTaskID());
+                String name = this.memberList.get(x).getPerson();
+                String query = "Insert into tbltaskmember (PersonID, TaskID, Name) VALUES ('" + personId + "','" + 
+                                taskId + "','" + name + "'";
+                try {
+                    this.dbc.insert(query);
+                } catch (SQLException ex) {
+                    response = "SQLException";
+                }
+            }
+        }
+        return response;
+    }
     
     private String loadTasks(String query, ObjectOutputStream writer) throws IOException{
         taskList.clear();

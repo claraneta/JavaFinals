@@ -59,6 +59,7 @@ public class assignTaskController {
     }
 
     private void initListener() {
+        model.getDataVector().clear();
         at.getBtnAdd().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -104,6 +105,8 @@ public class assignTaskController {
                 String personName;
                 String taskID;
                 String taskname = at.getCmbtaskname().getSelectedItem().toString();
+                memberList = new ArrayList();
+                System.out.println(model.getRowCount());
                 for(int x = 0; x < model.getRowCount(); x++ ){
                     //membermodel = new TaskMemberModel()
                     String personname = model.getValueAt(x, 0).toString();
@@ -114,17 +117,42 @@ public class assignTaskController {
                     
                     membermodel = new TaskMemberModel(Integer.parseInt(personId), personName, Integer.parseInt(taskID));
                     memberList.add(membermodel);
+                   
                     
                 }
                 
                 try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
-                    writer.writeUTF("insertMembers");
-                    writer = new ObjectOutputStream(socket.getOutputStream());
+                    try(PrintWriter out = new PrintWriter(socket.getOutputStream() , true)){
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        writer = new ObjectOutputStream(socket.getOutputStream());
+                        out.println("insertMembers");
+                        writer.writeObject(memberList);
+                        writer.flush();
+                        
+                        String serverResponse = reader.readLine();
+                        
+                        if(serverResponse.contains("OK")){
+                            JOptionPane.showMessageDialog(null, "Successfully Assigned");
+                        }else{
+                            JOptionPane.showMessageDialog(null, serverResponse);
+                        }
+                       
+                    }
+//                    writer.writeUTF("insertMembers");
                     
-                    writer.writeObject(memberList);
+   
+                    
                 }catch(IOException ex){
                     
                 }
+            }
+        });
+        
+        at.getBtnCancel().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                at.dispose();
+                db.setVisible(true);
             }
         });
     }
