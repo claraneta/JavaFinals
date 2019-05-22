@@ -65,9 +65,11 @@ public class TMSServerController {
                     break;
                     case "readAccounts": response = readAccount(bin.readLine(),bon);
                     break;
-                    case "loadPeople": loadPeople(bin.readLine(),writer);
+                    case "loadPeople": response = loadPeople(bin.readLine(),writer);
                     break;
-                    case "loadTasks" : loadTasks(bin.readLine(), writer);
+                    case "loadTasks" : response = loadTasks(bin.readLine(), writer);
+                    break;
+                    case "deleteTask": response = deleteTask(bin.readLine());
                     break;
 //                    case "updateAccount": updateAccount(bin.readLine());
 //                    break;
@@ -107,6 +109,8 @@ public class TMSServerController {
 //        return response;
 //    }
 //
+    
+    
     private String loadTasks(String query, ObjectOutputStream writer) throws IOException{
         taskList.clear();
         String response = "OK";
@@ -164,6 +168,18 @@ public class TMSServerController {
             }
         } catch (SQLException ex) {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+    }
+    
+    private String deleteTask(String query){
+        System.out.println(query);
+        String response = "OK";
+        try{
+            this.dbc.update(query);
+        }catch (SQLException ex){
+            response = "Deleting Task Denied";
+            
         }
         return response;
     }

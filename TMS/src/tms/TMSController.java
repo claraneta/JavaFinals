@@ -191,9 +191,9 @@ public class TMSController {
             @Override
             public void actionPerformed(ActionEvent e){
                 db.setVisible(false);
-                
+                ct = new CreateTask();
                 vt = new ViewTask(tblTask);
-                vtc = new viewTaskController(db,vt,tblTask);
+                vtc = new viewTaskController(db,vt,tblTask,ct);
             }
         });
     }

@@ -6,6 +6,7 @@
 package tms;
 
 import Model.TaskModel;
+import gui.CreateTask;
 import gui.ViewTask;
 import gui.dashboard;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,7 +34,9 @@ public class viewTaskController {
     DefaultTableModel model;
     ArrayList <TaskModel> taskList = new ArrayList();
     ObjectInputStream read;
-    viewTaskController(dashboard db, ViewTask vt, DefaultTableModel tblTask) {
+    CreateTask ct;
+    viewTaskController(dashboard db, ViewTask vt, DefaultTableModel tblTask,CreateTask ct) {
+        this.ct = ct;
         this.db = db;
         this.vt = vt;
         this.model = tblTask;
@@ -43,11 +47,54 @@ public class viewTaskController {
     }
 
     private void initListener() {
+        
         this.vt.getBtnback().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 vt.dispose();
                 db.setVisible(true);
+            }
+        });
+        
+        this.vt.getBtnDelete().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                //System.out.println(taskList.get(vt.getjTable1().getSelectedRow() ).getTaskID());
+                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
+                        writer.println("deleteTask");
+                        
+                        int id = taskList.get(vt.getjTable1().getSelectedRow() ).getTaskID();
+                        String ID = Integer.toString(id);
+                        
+                        writer.println("Delete from tbltasks where TaskID = " + ID);
+                        
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        
+                        String serverResponse = reader.readLine();
+                        
+                        if(serverResponse.contains("OK")){
+                            serverResponse = "OK";
+                        }
+                        
+                        switch(serverResponse){
+                            case "OK": model.removeRow(vt.getjTable1().getSelectedRow());JOptionPane.showMessageDialog(null, "Successfully Deleted !");
+                            break;
+                            default : JOptionPane.showMessageDialog(null, serverResponse);
+                        }
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(viewTaskController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+        
+        this.vt.getBtnUpdate().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                
+                ct.setVisible(true);
             }
         });
         
