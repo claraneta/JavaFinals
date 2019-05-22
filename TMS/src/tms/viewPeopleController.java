@@ -66,8 +66,6 @@ public class viewPeopleController {
                 
                 String response = reader.readLine();
                 
-
-                
                 if(response.equals("OK")){
                     Object[] arr = new Object[3];
                     for(int x = 0; x < personList.size(); x++){

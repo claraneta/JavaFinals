@@ -46,11 +46,13 @@ public class TMSController {
     ViewTask vt;
     viewPeople viewP;
     UpdateTask2 ut;
+    AssignTask at;
     
     //tablemodels for view
     DefaultTableModel tableModel;
     DefaultTableModel tblvPeople;
     DefaultTableModel tblTask;
+    DefaultTableModel tblassignTask;
     
     //staff view
     Sdashboard sd;
@@ -62,6 +64,7 @@ public class TMSController {
     viewPeopleController vpc;
     createTaskController ctc;
     viewTaskController vtc;
+    assignTaskController atc;
     
     //socket
     Socket soc;
@@ -93,6 +96,10 @@ public class TMSController {
         tblTask = new DefaultTableModel(0,0);
         tblTask.addColumn("TaskName");
         tblTask.addColumn("TaskSize");
+        
+        tblassignTask = new DefaultTableModel(0,0);
+        tblassignTask.addColumn("Name");
+        tblassignTask.addColumn("Gender");
         
         initListener();
         
@@ -178,7 +185,7 @@ public class TMSController {
             public void actionPerformed(ActionEvent e){
                 db.setVisible(false);
                 
-                ct = new CreateTask();
+                ct = new CreateTask();//view
                 ctc = new createTaskController(db,ct);
             }
         });
@@ -195,7 +202,13 @@ public class TMSController {
         db.getBtnassign().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                
+                at = new AssignTask(tblassignTask);
+                db.setVisible(false);
+                try {
+                    atc = new assignTaskController(db,at,tblassignTask);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
