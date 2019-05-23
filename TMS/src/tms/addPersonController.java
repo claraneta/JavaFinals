@@ -52,7 +52,7 @@ public class addPersonController {
                     try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
                         writer.println("addPerson");
                         writer.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
-                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False')");
+                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "',false)");
 //                        System.out.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
 //                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False');");
      

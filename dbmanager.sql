@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2019 at 07:01 AM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.1.2
+-- Generation Time: May 23, 2019 at 11:56 AM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -52,7 +52,7 @@ CREATE TABLE `tbladdpeson` (
   `Name` varchar(32) NOT NULL,
   `Gender` varchar(6) NOT NULL,
   `Email` varchar(32) NOT NULL,
-  `Assigned` varchar(5) NOT NULL
+  `Assigned` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -60,10 +60,13 @@ CREATE TABLE `tbladdpeson` (
 --
 
 INSERT INTO `tbladdpeson` (`IDPerson`, `Name`, `Gender`, `Email`, `Assigned`) VALUES
-(0000000001, 'Cris', 'Male', 'cris@gmail.com', 'False'),
-(0000000002, 'Alivio', 'Female', 'alivio@gmail.com', 'False'),
-(0000000003, 'Ibyang', 'MAle', 'iby@gmail.com', 'False'),
-(0000000004, 'KC', 'Male', 'KC@gmail.com', 'False');
+(0000000001, 'Cris', 'Male', 'cris@gmail.com', 1),
+(0000000002, 'Alivio', 'Female', 'alivio@gmail.com', 1),
+(0000000003, 'Ibyang', 'MAle', 'iby@gmail.com', 1),
+(0000000004, 'KC', 'Male', 'KC@gmail.com', 0),
+(0000000005, 'nicole', 'Female', '@gmail.com', 0),
+(0000000006, 'Louise', 'Female', 'louise@gmail.com', 0),
+(0000000007, 'qwert', 'Male', 'qwerty@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -89,6 +92,23 @@ CREATE TABLE `tbltaskmember` (
   `Name` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tbltaskmember`
+--
+
+INSERT INTO `tbltaskmember` (`PersonID`, `TaskID`, `Name`) VALUES
+(0000000001, 0000000004, ' Cris '),
+(0000000002, 0000000001, ' Alivio '),
+(0000000003, 0000000001, ' Ibyang ');
+
+--
+-- Triggers `tbltaskmember`
+--
+DELIMITER $$
+CREATE TRIGGER `New` AFTER INSERT ON `tbltaskmember` FOR EACH ROW UPDATE tbladdpeson SET tbladdpeson.Assigned=1 WHERE tbladdpeson.IDPerson=New.PersonID
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -107,7 +127,9 @@ CREATE TABLE `tbltasks` (
 
 INSERT INTO `tbltasks` (`TaskID`, `TaskName`, `TaskSize`) VALUES
 (0000000001, 'Windows', 2),
-(0000000002, 'Kitchen', 10);
+(0000000002, 'Kitchen', 10),
+(0000000003, 'Complab', 3),
+(0000000004, 'Office', 1);
 
 -- --------------------------------------------------------
 
@@ -167,7 +189,7 @@ ALTER TABLE `tblaccount`
 -- AUTO_INCREMENT for table `tbladdpeson`
 --
 ALTER TABLE `tbladdpeson`
-  MODIFY `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `tbldeletedtasks`
 --
@@ -177,7 +199,7 @@ ALTER TABLE `tbldeletedtasks`
 -- AUTO_INCREMENT for table `tbltasks`
 --
 ALTER TABLE `tbltasks`
-  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `tblusertype`
 --

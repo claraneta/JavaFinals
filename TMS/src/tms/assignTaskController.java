@@ -237,7 +237,7 @@ public class assignTaskController {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 read = new ObjectInputStream(socket.getInputStream());
                 writer.println("loadPeople");
-                writer.println("Select * from tbladdpeson");
+                writer.println("Select * from tbladdpeson where Assigned = 0");
                 
                 personList = (ArrayList<PersonModel>) read.readObject();//accept the model from the server
                 String serverResponse = reader.readLine();//read the response from the server

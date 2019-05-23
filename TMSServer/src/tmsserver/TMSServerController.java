@@ -23,6 +23,7 @@ import Model.PersonModel;
 import Model.TaskModel;
 import java.io.*;
 import Model.TaskMemberModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -84,8 +85,11 @@ public class TMSServerController {
                     break;
                     case "loadMembers" : response = loadMembers(bin.readLine(),writer);
                     break;
+                    case "logout": response = logout(sock);
+                    break;
                     default: System.out.println("Invalid instruction.");
                     break;
+                    
                 }
                 
                 bon.write(response);
@@ -96,7 +100,16 @@ public class TMSServerController {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    private String logout(Socket sock){
+        String response = "OK";
+        try {
+            sock.close();
+        } catch (IOException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+            response = "IOException";
+        }
+        return response;
+    }
 
     private String loadMembers(String query,ObjectOutputStream writer) throws IOException{
         ResultSet rs = null;

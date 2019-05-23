@@ -230,6 +230,27 @@ public class TMSController {
                 vtsc = new viewTaskSummaryController(vs,tblViewTasks,tblViewMembers,db);
             }
         });
+        
+        db.getBtnlogout().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        writer.println("logout");
+                        
+                        String serverResponse = reader.readLine();
+                        System.out.println(serverResponse);
+                        
+                        if(serverResponse.contains("OK")){
+                            db.dispose();
+                        }
+                    }
+                }catch(IOException ex){
+                    
+                }
+            }
+        });
     }
     
 }
