@@ -103,7 +103,7 @@ public class TMSServerController {
                 String personId = Integer.toString(this.memberList.get(x).getPersonID());
                 String taskId = Integer.toString(this.memberList.get(x).getTaskID());
                 String name = this.memberList.get(x).getPerson();
-                String query = "Insert into tbltaskmember (PersonID, TaskID, Name) VALUES ('" + personId + "','" + 
+                String query = "Insert into tbltaskmember (PersonID, Person, TaskID) VALUES ('" + personId + "','" + 
                                 taskId + "','" + name + "'";
                 try {
                     this.dbc.insert(query);

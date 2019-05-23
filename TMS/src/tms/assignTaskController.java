@@ -106,7 +106,7 @@ public class assignTaskController {
                 String taskID;
                 String taskname = at.getCmbtaskname().getSelectedItem().toString();
                 memberList = new ArrayList();
-                System.out.println(model.getRowCount());
+                
                 for(int x = 0; x < model.getRowCount(); x++ ){
                     //membermodel = new TaskMemberModel()
                     String personname = model.getValueAt(x, 0).toString();
@@ -122,11 +122,15 @@ public class assignTaskController {
                 }
                 
                 try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
-                    try(PrintWriter out = new PrintWriter(socket.getOutputStream() , true)){
+                    try(PrintWriter out = new PrintWriter(socket.getOutputStream() , false)){
                         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         writer = new ObjectOutputStream(socket.getOutputStream());
                         out.println("insertMembers");
+                        System.out.println("Client pushed a command to the server");
+                        out.flush();
+                       
                         writer.writeObject(memberList);
+                        System.out.println("Client has pushed the memberList");
                         writer.flush();
                         
                         String serverResponse = reader.readLine();
