@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2019 at 11:56 AM
--- Server version: 10.1.13-MariaDB
--- PHP Version: 5.6.21
+-- Generation Time: May 23, 2019 at 05:05 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 7.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `tblaccount` (
   `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL,
+  `PersonID` int(10) UNSIGNED ZEROFILL NOT NULL,
   `username` varchar(32) NOT NULL,
   `password` varchar(50) NOT NULL,
   `usertype` int(2) NOT NULL
@@ -37,9 +38,10 @@ CREATE TABLE `tblaccount` (
 -- Dumping data for table `tblaccount`
 --
 
-INSERT INTO `tblaccount` (`IDAccount`, `username`, `password`, `usertype`) VALUES
-(0000000001, 'jeanny', 'coder', 1),
-(0000000002, 'student', 'student', 2);
+INSERT INTO `tblaccount` (`IDAccount`, `PersonID`, `username`, `password`, `usertype`) VALUES
+(0000000001, 0000000000, 'jeanny', 'coder', 1),
+(0000000002, 0000000000, 'student', 'student', 2),
+(0000000003, 0000000001, 'sirc', 'sirc', 2);
 
 -- --------------------------------------------------------
 
@@ -184,7 +186,7 @@ ALTER TABLE `tblusertype`
 -- AUTO_INCREMENT for table `tblaccount`
 --
 ALTER TABLE `tblaccount`
-  MODIFY `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `tbladdpeson`
 --

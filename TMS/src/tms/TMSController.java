@@ -183,6 +183,10 @@ public class TMSController {
                         }
                         String response = reader.readLine();
                         
+                        if(!response.contains("OK")){
+                            JOptionPane.showMessageDialog(null, response);
+                        }
+                        
                     }
                 }catch(IOException ex){
                     
