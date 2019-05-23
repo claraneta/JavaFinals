@@ -47,15 +47,19 @@ public class addPersonController {
         ap.getBtnadd().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                
                 try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
                     try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
                         writer.println("addPerson");
-                        writer.println("Insert into tbladdpeson (Name, Gender, Email) VALUES ( '" + ap.getTfname().getText() + "','"
-                        + ap.getTfgender().getText() + "','" + ap.getTfemail().getText() + "')" );
+                        writer.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
+                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False')");
+//                        System.out.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
+//                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False');");
      
                         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         String responseFromServer = reader.readLine();
                         
+                        System.out.println("Server Response : " + responseFromServer);
                         
                         if(responseFromServer.contains("OK")){
                             responseFromServer = "OK";
@@ -78,7 +82,7 @@ public class addPersonController {
     
     private void clearText(){
         ap.getTfemail().setText("");
-        ap.getTfgender().setText("");
+        
         ap.getTfname().setText("");
     }
     

@@ -79,13 +79,7 @@ public class AssignTask extends javax.swing.JFrame {
         this.btnsubmit = btnsubmit;
     }
 
-    public JComboBox<String> getCmbfrom() {
-        return cmbfrom;
-    }
-
-    public void setCmbfrom(JComboBox<String> cmbfrom) {
-        this.cmbfrom = cmbfrom;
-    }
+    
 
     public JComboBox getCmbtaskname() {
         return cmbtaskname;
@@ -95,13 +89,7 @@ public class AssignTask extends javax.swing.JFrame {
         this.cmbtaskname = cmbtaskname;
     }
 
-    public JComboBox<String> getCmbuntil() {
-        return cmbuntil;
-    }
-
-    public void setCmbuntil(JComboBox<String> cmbuntil) {
-        this.cmbuntil = cmbuntil;
-    }
+    
 
     public JTable getjTable1() {
         return jTable1;
@@ -135,15 +123,11 @@ public class AssignTask extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lbTaskname = new javax.swing.JLabel();
-        cmbfrom = new javax.swing.JComboBox<>();
-        cmbuntil = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         btnsubmit = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         cmbtaskname = new javax.swing.JComboBox();
-        cmbMember = new javax.swing.JComboBox<>();
+        cmbMember = new javax.swing.JComboBox<String>();
         btnAdd = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         lbTaskSize = new javax.swing.JLabel();
@@ -217,16 +201,6 @@ public class AssignTask extends javax.swing.JFrame {
         lbTaskname.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         lbTaskname.setText("Task Name");
 
-        cmbfrom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cmbuntil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel6.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
-        jLabel6.setText("From:");
-
-        jLabel7.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
-        jLabel7.setText("Until:");
-
         btnsubmit.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         btnsubmit.setText("Submit");
 
@@ -235,7 +209,7 @@ public class AssignTask extends javax.swing.JFrame {
 
         cmbtaskname.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select TaskName" }));
 
-        cmbMember.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Name" }));
+        cmbMember.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Name" }));
 
         btnAdd.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         btnAdd.setText("Add");
@@ -266,16 +240,9 @@ public class AssignTask extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lbTaskSize, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbfrom, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cmbuntil, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7))
-                            .addGap(41, 41, 41)
+                            .addGap(3, 3, 3)
+                            .addComponent(lbTaskSize, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(130, 130, 130)
                             .addComponent(btnsubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(btnCancel)))
@@ -320,18 +287,10 @@ public class AssignTask extends javax.swing.JFrame {
                         .addComponent(lbTaskname)
                         .addGap(18, 18, 18)
                         .addComponent(lbTaskSize)))
-                .addGap(66, 66, 66)
+                .addGap(93, 93, 93)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbfrom, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cmbuntil, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnsubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnsubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
 
@@ -396,16 +355,12 @@ public class AssignTask extends javax.swing.JFrame {
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnsubmit;
     private javax.swing.JComboBox<String> cmbMember;
-    private javax.swing.JComboBox<String> cmbfrom;
     private javax.swing.JComboBox cmbtaskname;
-    private javax.swing.JComboBox<String> cmbuntil;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

@@ -35,10 +35,12 @@ public class TMSServerController {
     BufferedWriter bon;
     DBConnector dbc;
     AccountModel am;
+    
     private  ArrayList<AccountModel> accountsList;
     ArrayList<PersonModel> personList = new ArrayList();
     ArrayList<TaskModel> taskList = new ArrayList();
     ArrayList<TaskMemberModel> memberList = new ArrayList();
+    
     ObjectOutputStream writer;
     
     public TMSServerController() {
@@ -80,6 +82,8 @@ public class TMSServerController {
                     break;
                     case "insertMembers" : response = insertMembers(bin.readLine());
                     break;
+                    case "loadMembers" : response = loadMembers(bin.readLine(),writer);
+                    break;
                     default: System.out.println("Invalid instruction.");
                     break;
                 }
@@ -94,6 +98,32 @@ public class TMSServerController {
     }
 
 
+    private String loadMembers(String query,ObjectOutputStream writer) throws IOException{
+        ResultSet rs = null;
+        memberList.clear();
+        String response = "OK";
+        
+        TaskMemberModel memberModel;
+        
+        try {
+            rs = this.dbc.select(query);
+            
+            while(rs.next()){
+                memberModel = new TaskMemberModel(rs.getInt("PersonID"),rs.getString("Name"), rs.getInt("TaskID"));
+                memberList.add(memberModel);
+            }
+            
+            writer.writeObject(memberList);
+            writer.flush();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            response = "SQLException";
+        }
+        
+        
+        return response;
+    }
+    
     private String insertMembers(String query){
         System.out.println(query);
         String response = "OK";
@@ -190,10 +220,12 @@ public class TMSServerController {
     
     private String addPerson(String query) {
         String response = "OK";
+        System.out.println(query);
         try{
             this.dbc.insert(query);
         }catch (SQLException ex){
             response = "Adding Person Denied";
+            System.out.println(ex);
         }
         return response;
     }

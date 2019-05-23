@@ -55,6 +55,8 @@ public class assignTaskController {
         this.db = db;
         this.at = at;
         at.setVisible(true);
+        at.getBtnAdd().setEnabled(false);
+        at.getCmbMember().setEnabled(false);
         initListener();
         loadTasks();
         loadPeople();
@@ -72,6 +74,8 @@ public class assignTaskController {
                 
                 if(model.getRowCount() + 1 > Integer.parseInt(taskSize)){
                     JOptionPane.showMessageDialog(null, "Number of members in this task is only " + taskSize);
+                }else if(at.getCmbMember().getSelectedItem().toString().equalsIgnoreCase("Select Name")){
+                    JOptionPane.showMessageDialog(null, "Invalid selected name");
                 }else{
                     model.addRow(arr);
                     at.getCmbMember().removeItem(at.getCmbMember().getSelectedItem());
@@ -84,10 +88,12 @@ public class assignTaskController {
             @Override
             public void actionPerformed(ActionEvent e){
                 taskname = at.getCmbtaskname().getItemAt(at.getCmbtaskname().getSelectedIndex()).toString();
-                
+                at.getBtnAdd().setEnabled(true);
+                at.getCmbMember().setEnabled(true);
                 if(taskname.equalsIgnoreCase("Select TaskName")){
                     JOptionPane.showMessageDialog(null, "Invalid Task Name");
                 }else{
+                    
                     at.getLbTaskname().setText(taskname);
                     taskSize = getSize(taskname);
                     at.getLbTaskSize().setText(taskSize);
@@ -106,6 +112,8 @@ public class assignTaskController {
                 
                 if(model.getRowCount() < 1){
                     JOptionPane.showMessageDialog(null, "Nothing to add !");
+                }else if(model.getRowCount() < Integer.parseInt(at.getLbTaskSize().getText())){
+                    JOptionPane.showMessageDialog(null, "Members should be " + Integer.parseInt(at.getLbTaskSize().getText()) + " people" );
                 }else{
                     String personId;
                     String personName;
@@ -153,7 +161,9 @@ public class assignTaskController {
                     }else{
                         JOptionPane.showMessageDialog(null, serverResponse);
                     }
-                            
+                    at.dispose();
+                    db.setVisible(true);
+                    
                 }
             }
         });
