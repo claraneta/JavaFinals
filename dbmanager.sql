@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2019 at 03:54 PM
--- Server version: 10.1.26-MariaDB
--- PHP Version: 7.1.8
+-- Generation Time: May 23, 2019 at 07:01 AM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 7.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -40,7 +38,8 @@ CREATE TABLE `tblaccount` (
 --
 
 INSERT INTO `tblaccount` (`IDAccount`, `username`, `password`, `usertype`) VALUES
-(0000000001, 'jeanny', 'coder', 1);
+(0000000001, 'jeanny', 'coder', 1),
+(0000000002, 'student', 'student', 2);
 
 -- --------------------------------------------------------
 
@@ -51,8 +50,20 @@ INSERT INTO `tblaccount` (`IDAccount`, `username`, `password`, `usertype`) VALUE
 CREATE TABLE `tbladdpeson` (
   `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL,
   `Name` varchar(32) NOT NULL,
-  `Email` varchar(32) NOT NULL
+  `Gender` varchar(6) NOT NULL,
+  `Email` varchar(32) NOT NULL,
+  `Assigned` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbladdpeson`
+--
+
+INSERT INTO `tbladdpeson` (`IDPerson`, `Name`, `Gender`, `Email`, `Assigned`) VALUES
+(0000000001, 'Cris', 'Male', 'cris@gmail.com', 'False'),
+(0000000002, 'Alivio', 'Female', 'alivio@gmail.com', 'False'),
+(0000000003, 'Ibyang', 'MAle', 'iby@gmail.com', 'False'),
+(0000000004, 'KC', 'Male', 'KC@gmail.com', 'False');
 
 -- --------------------------------------------------------
 
@@ -69,6 +80,18 @@ CREATE TABLE `tbldeletedtasks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbltaskmember`
+--
+
+CREATE TABLE `tbltaskmember` (
+  `PersonID` int(10) UNSIGNED ZEROFILL NOT NULL,
+  `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL,
+  `Name` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbltasks`
 --
 
@@ -77,6 +100,14 @@ CREATE TABLE `tbltasks` (
   `TaskName` varchar(32) NOT NULL,
   `TaskSize` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbltasks`
+--
+
+INSERT INTO `tbltasks` (`TaskID`, `TaskName`, `TaskSize`) VALUES
+(0000000001, 'Windows', 2),
+(0000000002, 'Kitchen', 10);
 
 -- --------------------------------------------------------
 
@@ -131,12 +162,12 @@ ALTER TABLE `tblusertype`
 -- AUTO_INCREMENT for table `tblaccount`
 --
 ALTER TABLE `tblaccount`
-  MODIFY `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tbladdpeson`
 --
 ALTER TABLE `tbladdpeson`
-  MODIFY `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
+  MODIFY `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `tbldeletedtasks`
 --
@@ -146,13 +177,12 @@ ALTER TABLE `tbldeletedtasks`
 -- AUTO_INCREMENT for table `tbltasks`
 --
 ALTER TABLE `tbltasks`
-  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
+  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tblusertype`
 --
 ALTER TABLE `tblusertype`
-  MODIFY `IDUsertype` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;COMMIT;
-
+  MODIFY `IDUsertype` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

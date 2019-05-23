@@ -40,7 +40,7 @@ public class TMSServerController {
     ArrayList<TaskModel> taskList = new ArrayList();
     ArrayList<TaskMemberModel> memberList = new ArrayList();
     ObjectOutputStream writer;
-    ObjectInputStream reader;
+    
     public TMSServerController() {
         this.dbc = new DBConnector();   //instantiate DBConnector
         try {
@@ -61,7 +61,6 @@ public class TMSServerController {
                 bin  = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 bon = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
                 writer = new ObjectOutputStream(sock.getOutputStream());
-                
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
@@ -79,9 +78,10 @@ public class TMSServerController {
                     break;
                     case "updateTask" : response = updateTask(bin.readLine());
                     break;
-                    case "insertMembers" : System.out.println("Makainsert na unta");reader = new ObjectInputStream(sock.getInputStream());response = insertMembers((ArrayList<TaskMemberModel>)reader.readObject());
+                    case "insertMembers" : response = insertMembers(bin.readLine());
                     break;
                     default: System.out.println("Invalid instruction.");
+                    break;
                 }
                 
                 bon.write(response);
@@ -94,23 +94,13 @@ public class TMSServerController {
     }
 
 
-    private String insertMembers(ArrayList memberList ){
+    private String insertMembers(String query){
+        System.out.println(query);
         String response = "OK";
-        this.memberList = memberList;
-        if(!this.memberList.isEmpty()){
-            
-            for(int x = 0; x < this.memberList.size(); x++){
-                String personId = Integer.toString(this.memberList.get(x).getPersonID());
-                String taskId = Integer.toString(this.memberList.get(x).getTaskID());
-                String name = this.memberList.get(x).getPerson();
-                String query = "Insert into tbltaskmember (PersonID, Person, TaskID) VALUES ('" + personId + "','" + 
-                                taskId + "','" + name + "'";
-                try {
-                    this.dbc.insert(query);
-                } catch (SQLException ex) {
-                    response = "SQLException";
-                }
-            }
+        try{
+            this.dbc.insert(query);
+        }catch(SQLException ex){
+            response = "SQLException";
         }
         return response;
     }
@@ -145,7 +135,7 @@ public class TMSServerController {
             rs = this.dbc.select(query);
 
             while(rs.next()){
-                person = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"));
+                person = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"),Boolean.getBoolean(rs.getString("Assigned")));
                 personList.add(person);
             }
             writer.writeObject(personList);

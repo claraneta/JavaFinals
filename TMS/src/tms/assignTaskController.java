@@ -40,6 +40,8 @@ public class assignTaskController {
     ObjectInputStream read;
     PersonModel person;
     DefaultTableModel model;
+    
+    private String taskname;
     private String taskSize;
     
     ObjectOutputStream writer;
@@ -81,15 +83,15 @@ public class assignTaskController {
         at.getBtnOk().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                String taskname = at.getCmbtaskname().getItemAt(at.getCmbtaskname().getSelectedIndex()).toString();
-                System.out.println(taskname);
+                taskname = at.getCmbtaskname().getItemAt(at.getCmbtaskname().getSelectedIndex()).toString();
+                
                 if(taskname.equalsIgnoreCase("Select TaskName")){
                     JOptionPane.showMessageDialog(null, "Invalid Task Name");
                 }else{
                     at.getLbTaskname().setText(taskname);
                     taskSize = getSize(taskname);
                     at.getLbTaskSize().setText(taskSize);
-                    at.getCmbtaskname().removeItem(at.getCmbtaskname().getSelectedItem());
+                    
                     at.getCmbtaskname().setEnabled(false);
                     at.getBtnOk().setEnabled(false);
 //                    model.setRowCount(Integer.parseInt(at.getLbTaskSize().getText()));
@@ -101,53 +103,57 @@ public class assignTaskController {
         at.getBtnsubmit().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                String personId;
-                String personName;
-                String taskID;
-                String taskname = at.getCmbtaskname().getSelectedItem().toString();
-                memberList = new ArrayList();
                 
-                for(int x = 0; x < model.getRowCount(); x++ ){
-                    //membermodel = new TaskMemberModel()
-                    String personname = model.getValueAt(x, 0).toString();
-                    
-                    personId = Integer.toString(personID(personname));
-                    personName = personname(personname);
-                    taskID = Integer.toString(taskID(taskname));
-                    
-                    membermodel = new TaskMemberModel(Integer.parseInt(personId), personName, Integer.parseInt(taskID));
-                    memberList.add(membermodel);
-                   
-                    
-                }
-                
-                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
-                    try(PrintWriter out = new PrintWriter(socket.getOutputStream() , false)){
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        writer = new ObjectOutputStream(socket.getOutputStream());
-                        out.println("insertMembers");
-                        System.out.println("Client pushed a command to the server");
-                        out.flush();
-                       
-                        writer.writeObject(memberList);
-                        System.out.println("Client has pushed the memberList");
-                        writer.flush();
-                        
-                        String serverResponse = reader.readLine();
-                        
-                        if(serverResponse.contains("OK")){
-                            JOptionPane.showMessageDialog(null, "Successfully Assigned");
-                        }else{
-                            JOptionPane.showMessageDialog(null, serverResponse);
-                        }
-                       
+                if(model.getRowCount() < 1){
+                    JOptionPane.showMessageDialog(null, "Nothing to add !");
+                }else{
+                    String personId;
+                    String personName;
+                    String taskID;
+                    taskname = at.getCmbtaskname().getItemAt(at.getCmbtaskname().getSelectedIndex()).toString();
+                    System.out.println(taskname);
+                    String serverResponse = "";
+                    memberList = new ArrayList();
+
+                    for(int x = 0; x < model.getRowCount(); x++ ){
+                        String personname = model.getValueAt(x, 0).toString();
+                        personId = Integer.toString(personID(personname));
+                        personName = personname(personname);
+                        taskID = Integer.toString(taskID(taskname));
+                        System.out.println(taskID);
+                        membermodel = new TaskMemberModel(Integer.parseInt(personId), personName, Integer.parseInt(taskID));
+                        memberList.add(membermodel);
+
                     }
-//                    writer.writeUTF("insertMembers");
-                    
-   
-                    
-                }catch(IOException ex){
-                    
+
+                    for(int x = 0; x< memberList.size(); x++){
+                        String personID = Integer.toString(memberList.get(x).getPersonID());
+                        String TaskID = Integer.toString(memberList.get(x).getTaskID());
+                        String pname = memberList.get(x).getPerson();
+                        try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+                            try(PrintWriter out = new PrintWriter(socket.getOutputStream() , true)){
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                                out.println("insertMembers");
+                                out.println("Insert INTO tbltaskmember ( PersonID , TaskID, Name) VALUES( ' " + personID + " ',' "
+                                + TaskID + " ',' " + pname + " ')");
+                                System.out.println("Client pushed the command and query to the server");
+                                serverResponse = reader.readLine();
+
+                        }
+                        }catch(IOException ex){
+
+                        }
+                    }
+
+                    if(serverResponse.contains("OK")){
+                        JOptionPane.showMessageDialog(null, "Successfully Assigned");
+                        at.getCmbtaskname().removeItem(at.getCmbtaskname().getSelectedItem());
+                        at.getCmbtaskname().setEnabled(true);
+                        at.getBtnsubmit().setEnabled(true);
+                    }else{
+                        JOptionPane.showMessageDialog(null, serverResponse);
+                    }
+                            
                 }
             }
         });
@@ -253,6 +259,7 @@ public class assignTaskController {
                 if(serverResponse.contains("OK")){
                     for(int x = 0; x < taskList.size(); x++){
                         at.getCmbtaskname().addItem(taskList.get(x).getTaskName());
+                        
                     }
                 }
                 

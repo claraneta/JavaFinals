@@ -17,11 +17,13 @@ public class PersonModel implements Serializable{
     private String gender;
     private String email;
     private int ID;
-    public PersonModel(int ID,String name, String gender, String email) {
+    private boolean assigned;
+    public PersonModel(int ID,String name, String gender, String email,boolean assigned) {
         this.ID = ID;
         this.name = name;
         this.gender = gender;
         this.email = email;
+        this.assigned = assigned;
     }
 
     public String getName() {

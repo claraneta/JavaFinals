@@ -52,7 +52,7 @@ public class addPersonController {
                         writer.println("addPerson");
                         writer.println("Insert into tbladdpeson (Name, Gender, Email) VALUES ( '" + ap.getTfname().getText() + "','"
                         + ap.getTfgender().getText() + "','" + ap.getTfemail().getText() + "')" );
-            
+     
                         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         String responseFromServer = reader.readLine();
                         
