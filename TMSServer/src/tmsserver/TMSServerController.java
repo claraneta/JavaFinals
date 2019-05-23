@@ -85,7 +85,7 @@ public class TMSServerController {
                     break;
                     case "loadMembers" : response = loadMembers(bin.readLine(),writer);
                     break;
-                    case "logout": response = logout(sock);
+                    case "logout": logout(sock);
                     break;
                     default: System.out.println("Invalid instruction.");
                     break;
@@ -100,15 +100,15 @@ public class TMSServerController {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private String logout(Socket sock){
-        String response = "OK";
+    private void logout(Socket sock){
+        
         try {
             sock.close();
         } catch (IOException ex) {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
-            response = "IOException";
+            
         }
-        return response;
+        
     }
 
     private String loadMembers(String query,ObjectOutputStream writer) throws IOException{

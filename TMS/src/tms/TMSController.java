@@ -146,6 +146,7 @@ public class TMSController {
                                 sd = new Sdashboard();
                                 sd.getLblname().setText(name);
                                 sd.setVisible(true);
+                                sdinitListener();
                             }
                         }else{
                             JOptionPane.showMessageDialog(null, "Account not found");
@@ -162,6 +163,11 @@ public class TMSController {
         });
         
     }
+    
+    private void sdinitListener(){
+        
+    }
+    
     
     private void dbinitListener() {
         
@@ -236,15 +242,9 @@ public class TMSController {
             public void actionPerformed(ActionEvent e){
                 try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
                     try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        
                         writer.println("logout");
-                        
-                        String serverResponse = reader.readLine();
-                        System.out.println(serverResponse);
-                        
-                        if(serverResponse.contains("OK")){
-                            db.dispose();
-                        }
+                        db.dispose();
                     }
                 }catch(IOException ex){
                     
