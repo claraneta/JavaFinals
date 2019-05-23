@@ -10,15 +10,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.Serializable;
 
 /**
  *
  * @author 2ndyrGroupA
  */
-public class AccountModel{
-    
-    private static final long serialVersionUID = 1L;
+public class AccountModel implements Serializable{
+
     private int IDAccount;
+    private int PersonID;
     private String username;
     private String password;
     private int usertype;
@@ -26,8 +27,9 @@ public class AccountModel{
     /**
      * @return the itemID
      */
-    public AccountModel(int id, String uname, String pass, int utype) {
-        this.IDAccount = id;
+    public AccountModel(int accountID, int personID, String uname, String pass, int utype) {
+        this.IDAccount = accountID;
+        this.PersonID = personID;
         this.username = uname;
         this.password =pass ;
         this.usertype=utype;
@@ -36,13 +38,14 @@ public class AccountModel{
         this.username = uname;
         this.password = pass;
     }
+    
     public ArrayList populateAccounts(ResultSet rs){
         ArrayList accountList = null;
         try {
             if(rs.next()){
                 accountList = new ArrayList<>();
                 do{
-                    accountList.add(new AccountModel(rs.getInt("IDAccount"),rs.getString("username"),rs.getString("password"),rs.getInt("usertype")));
+                    accountList.add(new AccountModel(rs.getInt("IDAccount"),rs.getInt("PersonID"),rs.getString("username"),rs.getString("password"),rs.getInt("usertype")));
                 }while(rs.next());
             }
         } catch (SQLException ex) {
@@ -50,7 +53,7 @@ public class AccountModel{
         }
         return accountList;
     }
-
+    
     public int getIDAccount() {
         return IDAccount;
     }
@@ -83,6 +86,13 @@ public class AccountModel{
         this.usertype = usertype;
     }
 
+    public int getPersonID() {
+        return PersonID;
+    }
+
+    public void setPersonID(int PersonID) {
+        this.PersonID = PersonID;
+    }
     
 
     public Object[] toArray() {

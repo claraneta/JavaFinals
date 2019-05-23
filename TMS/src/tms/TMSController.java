@@ -30,6 +30,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -56,6 +57,7 @@ public class TMSController {
     DefaultTableModel tblassignTask;
     DefaultTableModel tblViewTasks;
     DefaultTableModel tblViewMembers;
+    DefaultTableModel tblViewMyTask;
     
     //staff view
     Sdashboard sd;
@@ -87,6 +89,111 @@ public class TMSController {
     public TMSController() {
         su = new signUp();
         su.setVisible(true);
+        
+        initListener();
+        
+    }
+    
+    private void initListener(){
+        
+        su.getBtnlogin().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                //account = new AccountModel(su.getTfusername().getText(), su.getPfpass().getText());
+                try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
+                        writer.println("readAccounts");
+                        writer.println("Select * from tblaccount where username = '" + su.getTfusername().getText() + "' AND password = '" 
+                        + su.getPfpass().getText() + "'");
+                        BufferedReader read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        ObjectInputStream reader = new ObjectInputStream(socket.getInputStream());
+                        
+                        try {
+                            account = (AccountModel) reader.readObject();
+                            String serverResponse = read.readLine();
+                            if(serverResponse.contains("OK")){
+                                su.dispose();
+                                
+                                if(account.getUsertype() == 1){
+                                    db = new dashboard();
+                                    db.setVisible(true);
+                                    dbinitListener();
+                                }else{
+                                    sd = new Sdashboard();
+                                    sd.setVisible(true);
+                                    sdinitListener(account);
+                                }
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, serverResponse);
+                            }
+                            
+
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    
+                    
+                } catch (IOException ex) {
+                    System.out.println(ex);
+                }  
+
+            }
+            
+        });
+        
+    }
+    
+    private void sdinitListener(AccountModel am){
+        
+        tblViewMyTask = new DefaultTableModel(0,0);
+        tblViewMyTask.addColumn("Name");
+        
+        sd.getLblname().setText(am.getUsername());
+        
+        sd.getBtnviewmytask().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                sd.setVisible(false);
+                vmt = new viewMytask(tblViewMyTask);
+                vmt.setVisible(true);
+                Hashtable <String,String> ht = new Hashtable<String,String>();
+                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
+                        writer.println("viewMyTask");
+                        ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        try {
+                            ht = (Hashtable<String, String>) objectReader.readObject();
+                            ArrayList<String> names = new ArrayList();
+                            names.addAll(ht.keySet());
+                            Object[] arr = new Object[names.size()];
+                            
+                            vmt.getLblTaskName().setText(ht.get(names.get(0)));
+                            
+                            for(int x = 0; x < arr.length;x++){
+                                arr[0] = names.get(x);
+                                tblViewMyTask.addRow(arr);
+                            }
+                            
+                            
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        String response = reader.readLine();
+                        
+                    }
+                }catch(IOException ex){
+                    
+                }
+            }
+        });
+    }
+    
+    
+    private void dbinitListener() {
+        
         tableModel = new DefaultTableModel(0, 0);
         tableModel.addColumn("Task ID");
         tableModel.addColumn("Task Name");
@@ -111,65 +218,6 @@ public class TMSController {
         tblViewMembers = new DefaultTableModel(0,0);
         tblViewMembers.addColumn("Name");
         
-        initListener();
-        
-    }
-    
-    private void initListener(){
-        
-        su.getBtnlogin().addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                //account = new AccountModel(su.getTfusername().getText(), su.getPfpass().getText());
-                try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
-                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
-                        writer.println("readAccounts");
-                        writer.println("Select * from tblaccount where username = '" + su.getTfusername().getText() + "' AND password = '" 
-                        + su.getPfpass().getText() + "'");
-                        
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String type = reader.readLine().toString();
-                        if (type.contains("1")){
-                            type = "1";
-                        }
-                        
-                        String name = reader.readLine();
-                        String responseFromServer = reader.readLine();
-                        if(responseFromServer.equals("OK")){
-                            su.dispose();
-                            
-                            if(type.equals("1")){
-                                db = new dashboard();
-                                db.setVisible(true);
-                                dbinitListener();
-                            }else{
-                                sd = new Sdashboard();
-                                sd.getLblname().setText(name);
-                                sd.setVisible(true);
-                                sdinitListener();
-                            }
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Account not found");
-                        }
-                    }
-                    
-                    
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }  
-
-            }
-            
-        });
-        
-    }
-    
-    private void sdinitListener(){
-        
-    }
-    
-    
-    private void dbinitListener() {
         
         db.getBtnaddpeople().addActionListener(new ActionListener(){
             @Override

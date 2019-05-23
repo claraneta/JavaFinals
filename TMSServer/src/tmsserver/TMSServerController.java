@@ -23,6 +23,7 @@ import Model.PersonModel;
 import Model.TaskModel;
 import java.io.*;
 import Model.TaskMemberModel;
+import java.util.Hashtable;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,19 +31,24 @@ import javax.swing.JOptionPane;
  * @author 2ndyrGroupB
  */
 public class TMSServerController {
+    
     ServerSocket ss;
     Socket sock;
+    
     BufferedReader bin;
     BufferedWriter bon;
+    
+    ObjectOutputStream writer;
+    
     DBConnector dbc;
+    
+    
     AccountModel am;
     
-    private  ArrayList<AccountModel> accountsList;
+    private ArrayList<AccountModel> accountsList;
     ArrayList<PersonModel> personList = new ArrayList();
     ArrayList<TaskModel> taskList = new ArrayList();
     ArrayList<TaskMemberModel> memberList = new ArrayList();
-    
-    ObjectOutputStream writer;
     
     public TMSServerController() {
         this.dbc = new DBConnector();   //instantiate DBConnector
@@ -71,7 +77,9 @@ public class TMSServerController {
                     break;
                     case "InsertTask" : response = insertTask(bin.readLine());
                     break;
-                    case "readAccounts": response = readAccount(bin.readLine(),bon);
+                    case "readAccounts": response = readAccount(bin.readLine(),writer);
+                    break;
+                    case "viewMyTask" : response = viewMyTask(writer);
                     break;
                     case "loadPeople": response = loadPeople(bin.readLine(),writer);
                     break;
@@ -100,6 +108,73 @@ public class TMSServerController {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private String viewMyTask(ObjectOutputStream writer) throws IOException{
+        ResultSet rs = null;
+        String response = "OK";
+        String Task = ""; //naa na sulod
+        TaskMemberModel memberModel;
+        TaskModel taskModel;
+        
+        Hashtable<String, String> ht = new Hashtable<String,String>();
+        
+        String query = "Select * from tbltaskmember where PersonID = " + am.getPersonID();
+        String myTask;
+        
+        try {
+            rs = this.dbc.select(query);
+            
+            if(rs.next()){
+                memberModel = new TaskMemberModel(rs.getInt("PersonID"), rs.getString("Name"), rs.getInt("TaskID"));
+                myTask = "Select * from tbltasks where TaskID = " + memberModel.getTaskID();
+                ResultSet set = this.dbc.select(myTask);
+                
+                if(set.next()){
+                    taskModel = new TaskModel(set.getInt("TaskID"), set.getString("TaskName"), set.getInt("TaskSize"));
+                    Task = taskModel.getTaskName();
+                    String member = "Select * from tbltaskmember where TaskID = " + Integer.toString(taskModel.getTaskID());
+                    ResultSet rset = this.dbc.select(member);
+                    
+                    while(rset.next()){
+                        memberModel = new TaskMemberModel(rset.getInt("PersonID"), rset.getString("Name"), rset.getInt("TaskID"));
+                        ht.put(memberModel.getPerson(), Task);
+                    }
+                    writer.writeObject(ht);
+                    writer.flush();
+                }
+            }else{
+                response = "You have no Task";
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+        
+    }
+    
+    private String readAccount(String query, ObjectOutputStream writer) throws IOException {
+        String response = "OK";
+        ResultSet rs = null;
+        try {
+            rs = dbc.select(query);
+            //this.accountsList = am.populateAccounts(rs);
+            if(!rs.next()){
+                response = "Account Not found";
+            }else{
+                am = new AccountModel(rs.getInt("IDAccount"), rs.getInt("PersonID"), rs.getString("username"), rs.getString("password"), rs.getInt("usertype"));
+                writer.writeObject(am);
+                writer.flush();
+//                bon.write(Integer.toString(rs.getInt("usertype")) + "\n" + rs.getString("username") + "\n");
+//                bon.flush();
+            }
+        } catch (SQLException ex) {
+            response = "Account not found";
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+    }
+    
     private void logout(Socket sock){
         
         try {
@@ -188,24 +263,6 @@ public class TMSServerController {
             response = "SQL Exception";
         }
         
-        return response;
-    }
-    
-    private String readAccount(String query, BufferedWriter bon) throws IOException {
-        String response = "OK";
-        ResultSet rs =null;
-        try {
-            rs = dbc.select(query);
-            //this.accountsList = am.populateAccounts(rs);
-            if(!rs.next()){
-                response = "Account Not found";
-            }else{
-                bon.write(Integer.toString(rs.getInt("usertype")) + "\n" + rs.getString("username") + "\n");
-                bon.flush();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return response;
     }
     
