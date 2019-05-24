@@ -64,6 +64,8 @@ public class createAccountController {
 
                             if(response.contains("OK")){
                                 JOptionPane.showMessageDialog(null, "Successfully created account");
+                                ca.dispose();
+                                vp.setVisible(true);
                             }else{
                                 JOptionPane.showMessageDialog(null, response);
                             }
@@ -74,6 +76,14 @@ public class createAccountController {
                 }else{
                     JOptionPane.showMessageDialog(null, person);
                 } 
+            }
+        });
+        
+        ca.getBtncancel().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                ca.dispose();
+                vp.setVisible(true);
             }
         });
     }

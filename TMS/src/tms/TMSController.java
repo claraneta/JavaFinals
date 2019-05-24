@@ -71,6 +71,7 @@ public class TMSController {
     viewTaskController vtc;
     assignTaskController atc;
     viewTaskSummaryController vtsc;
+    changePassController cpc;
     
     //socket
     Socket soc;
@@ -191,6 +192,36 @@ public class TMSController {
                 }catch(IOException ex){
                     
                 }
+                vmt.getBtnBack().addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vmt.dispose();
+                        sd.setVisible(true);
+                    }
+                });
+            }
+        });
+        
+        sd.getBtnchangepass().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                sd.setVisible(false);
+                cp = new changePass();
+                
+                
+                try {
+                    cpc = new changePassController(sd,cp);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        });
+        
+        sd.getBtnlogout().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                sd.dispose();
             }
         });
     }
@@ -292,15 +323,7 @@ public class TMSController {
         db.getBtnlogout().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
-                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
-                        
-                        writer.println("logout");
-                        db.dispose();
-                    }
-                }catch(IOException ex){
-                    
-                }
+                db.dispose();
             }
         });
     }

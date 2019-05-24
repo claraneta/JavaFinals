@@ -97,10 +97,8 @@ public class assignTaskController {
                     at.getLbTaskname().setText(taskname);
                     taskSize = getSize(taskname);
                     at.getLbTaskSize().setText(taskSize);
-                    
                     at.getCmbtaskname().setEnabled(false);
                     at.getBtnOk().setEnabled(false);
-//                    model.setRowCount(Integer.parseInt(at.getLbTaskSize().getText()));
                 }
                 
             }
@@ -146,11 +144,12 @@ public class assignTaskController {
                                 + TaskID + " ',' " + pname + " ')");
                                 System.out.println("Client pushed the command and query to the server");
                                 serverResponse = reader.readLine();
-
+                                updateTaskStatus(taskname);
                         }
                         }catch(IOException ex){
 
                         }
+                        
                     }
 
                     if(serverResponse.contains("OK")){
@@ -175,6 +174,27 @@ public class assignTaskController {
                 db.setVisible(true);
             }
         });
+    }
+    
+    private void updateTaskStatus(String name){
+        try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+            try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer.println("updateTaskStatus");
+                writer.println("Update tbltasks set TaskStatus = 1 where TaskName = '" + name + "'");
+                System.out.println("Update tbltasks set TaskStatus = 1 where TaskName = '" + name + "'");
+                
+                String serverResponse = reader.readLine();
+                
+                if(serverResponse.contains("OK")){
+                    JOptionPane.showMessageDialog(null,"Task is now close for new Members(s) !");
+                }else{
+                    JOptionPane.showMessageDialog(null, serverResponse);
+                }
+            }
+        }catch(IOException ex){
+            
+        }
     }
     
     private int taskID(String name){
@@ -261,7 +281,7 @@ public class assignTaskController {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 read = new ObjectInputStream(socket.getInputStream());
                 writer.println("loadTasks");
-                writer.println("Select * from tbltasks");
+                writer.println("Select * from tbltasks where TaskStatus = 0");
                 
                 taskList = (ArrayList<TaskModel>) read.readObject();//accept the model from the server
                 String serverResponse = reader.readLine();//read the response from the server
@@ -278,5 +298,7 @@ public class assignTaskController {
             Logger.getLogger(assignTaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     
 }

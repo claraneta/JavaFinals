@@ -73,6 +73,8 @@ public class TMSServerController {
                 //read 1st line from socket (contains method name to invoke)
                 switch(bin.readLine()){
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
+                    case "myAccount": response = myAccount(writer);
+                    break;
                     case "addPerson": response =  addPerson(bin.readLine());
                     break;
                     case "checkPerson": response = checkPerson(bin.readLine());
@@ -101,6 +103,10 @@ public class TMSServerController {
                     break;
                     case "logout": logout(sock);
                     break;
+                    case "updateTaskStatus" : response = updateTaskStatus(bin.readLine());
+                    break;
+                    case "updatePass": response = updatePass(bin.readLine());
+                    break;
                     default: System.out.println("Invalid instruction.");
                     break;
                     
@@ -113,6 +119,42 @@ public class TMSServerController {
         } catch (IOException ex) {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private String updatePass(String query){
+        String response = "OK";
+        
+        try {
+            this.dbc.update(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+    }
+    
+    private String myAccount(ObjectOutputStream writer){
+        String response = "OK";
+        
+        try {
+            writer.writeObject(am);
+            writer.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+    }
+    
+    private String updateTaskStatus(String query){
+        String response = "OK";
+        try {
+            this.dbc.update(query);
+        } catch (SQLException ex) {
+            response = "SQL Exception";
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
     
     private String checkPerson(String query){
