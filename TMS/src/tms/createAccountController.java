@@ -53,18 +53,18 @@ public class createAccountController {
 
                             String response = reader.readLine();
 
-                            if(response.equals("OK")){
-                                Object[] arr = new Object[3];
-                                for(int x = 0; x < personList.size(); x++){
-                                    //arr[0] = personList.get(x).getID();
-                                    arr[0] = personList.get(x).getName();
-                                    arr[1] = personList.get(x).getGender();
-                                    arr[2] = personList.get(x).getEmail();
-                                    model.addRow(arr);
-                                }
-                            }else{
-                                JOptionPane.showMessageDialog(null, response);
-                            }
+//                            if(response.equals("OK")){
+//                                Object[] arr = new Object[3];
+//                                for(int x = 0; x < personList.size(); x++){
+//                                    //arr[0] = personList.get(x).getID();
+//                                    arr[0] = personList.get(x).getName();
+//                                    arr[1] = personList.get(x).getGender();
+//                                    arr[2] = personList.get(x).getEmail();
+//                                    model.addRow(arr);
+//                                }
+//                            }else{
+//                                JOptionPane.showMessageDialog(null, response);
+//                            }
                         }
                     }catch(IOException ex){
                         System.out.println("Di mao");
