@@ -29,39 +29,79 @@ public class createAccountController {
     viewPeople vp;
     String personName;
     CreateAccount ca;
-    createAccountController(viewPeople vp, String name, CreateAccount ca) {
+    
+    PersonModel personModel;
+    
+    private int ID;
+    
+    createAccountController(viewPeople vp, String name, CreateAccount ca, PersonModel person) {
         this.vp = vp;
         this.personName = name;
         this.ca = ca;
+        this.personModel = person;
         ca.setVisible(true);
         ca.getLblname().setText(personName);
+        System.out.println("ID of " + personName + " : " + personModel.getID());
+        getPersonID();
         initListener();
+        
+        //loadPeople();
     }
 
     private void initListener() {
         ca.getBtncreate().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000 ) ){
-                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        writer.println("createAccount");
-                        writer.println("Select * from tbladdpeson where Name = '" + personName + "'");
+                String person = checkPerson();
+                if(person.contains("OK")){
+                    try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000 ) ){
+                        try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            writer.println("createAccount");
+                            writer.println("Select * from tbladdpeson where Name = '" + personName + "'");
 
-                        String response = reader.readLine();
-    
-                        if(response.contains("OK")){
-                            JOptionPane.showMessageDialog(null, "Successfully created account");
-                        }else{
-                            JOptionPane.showMessageDialog(null, response);
+                            String response = reader.readLine();
+
+                            if(response.contains("OK")){
+                                JOptionPane.showMessageDialog(null, "Successfully created account");
+                            }else{
+                                JOptionPane.showMessageDialog(null, response);
+                            }
                         }
+                    }catch(IOException ex){
+                        System.out.println("Di mao");
                     }
-                }catch(IOException ex){
-                    System.out.println("Di mao");
-                }
-                
+                }else{
+                    JOptionPane.showMessageDialog(null, person);
+                } 
             }
         });
+    }
+
+    //method that will check if the person has already account
+    private String checkPerson() {
+        String response ="";
+        
+        try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
+            try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
+                BufferedReader reader =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer.println("checkPerson");
+                writer.println("Select * from tblaccount where PersonID = " + personModel.getID());
+                System.out.println("Select * from tblaccount where PersonID = " + personModel.getID());
+                response = reader.readLine();
+                
+            }
+        }catch (IOException ex){
+            
+        }
+        return response;
+    }
+
+    //method that will get the ID of the displayed name in the CreateAccountView
+    private void getPersonID() {
+        if(personModel.getName().equals(this.personName)){
+            ID = personModel.getID();
+        }
     }
     
 }

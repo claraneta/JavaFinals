@@ -5,6 +5,7 @@
  */
 package tms;
 
+import Model.AccountModel;
 import Model.PersonModel;
 import gui.CreateAccount;
 import gui.dashboard;
@@ -19,6 +20,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +35,8 @@ public class viewPeopleController {
     dashboard db;
     DefaultTableModel model;
     ArrayList<PersonModel> personList = new ArrayList();
+    
+    private String name;
     
     ObjectInputStream read;
     
@@ -59,12 +64,36 @@ public class viewPeopleController {
         vp.getBtncreateAccount().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                String name = model.getValueAt(vp.getjTable1().getSelectedRow(), 0).toString();
+                name = model.getValueAt(vp.getjTable1().getSelectedRow(), 0).toString();
                 ca = new CreateAccount();
                 vp.setVisible(false);
-                createAccountController cac = new createAccountController(vp,name,ca);
+                
+                try {
+                    createAccountController cac = new createAccountController(vp,name,ca,getPerson());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(viewPeopleController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
+    }
+    
+    private PersonModel getPerson() throws ClassNotFoundException{
+        PersonModel personModel = null;
+        try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000)){
+            try(PrintWriter writer = new PrintWriter(socket.getOutputStream(),true)){
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                ObjectInputStream read = new ObjectInputStream(socket.getInputStream());
+                writer.println("getPerson");
+                writer.println("Select * from tbladdpeson where Name = '"+ name + "'");
+                
+                personModel = (PersonModel) read.readObject();
+                reader.readLine();
+                
+            }
+        }catch(IOException ex){
+            
+        }
+        return personModel;
     }
 
     private void loadPeople() throws ClassNotFoundException {

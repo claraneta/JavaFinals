@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.1.12
+-- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2019 at 05:05 PM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.1.2
+-- Generation Time: May 24, 2019 at 10:19 AM
+-- Server version: 5.6.16
+-- PHP Version: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `dbmanager`
@@ -26,13 +26,14 @@ SET time_zone = "+00:00";
 -- Table structure for table `tblaccount`
 --
 
-CREATE TABLE `tblaccount` (
-  `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL,
-  `PersonID` int(10) UNSIGNED ZEROFILL NOT NULL,
+CREATE TABLE IF NOT EXISTS `tblaccount` (
+  `IDAccount` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `PersonID` int(10) unsigned zerofill NOT NULL,
   `username` varchar(32) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `usertype` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `usertype` int(2) NOT NULL,
+  PRIMARY KEY (`IDAccount`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `tblaccount`
@@ -41,7 +42,18 @@ CREATE TABLE `tblaccount` (
 INSERT INTO `tblaccount` (`IDAccount`, `PersonID`, `username`, `password`, `usertype`) VALUES
 (0000000001, 0000000000, 'jeanny', 'coder', 1),
 (0000000002, 0000000000, 'student', 'student', 2),
-(0000000003, 0000000001, 'sirc', 'sirc', 2);
+(0000000003, 0000000001, 'sirc', 'sirc', 2),
+(0000000008, 0000000007, 'userqwert', '1234', 2);
+
+--
+-- Triggers `tblaccount`
+--
+DROP TRIGGER IF EXISTS `accountstat`;
+DELIMITER //
+CREATE TRIGGER `accountstat` AFTER INSERT ON `tblaccount`
+ FOR EACH ROW UPDATE tbladdpeson set tbladdpeson.AccountStatus = 1 where tbladdpeson.IDPerson = NEW.PersonID
+//
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -49,26 +61,28 @@ INSERT INTO `tblaccount` (`IDAccount`, `PersonID`, `username`, `password`, `user
 -- Table structure for table `tbladdpeson`
 --
 
-CREATE TABLE `tbladdpeson` (
-  `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbladdpeson` (
+  `IDPerson` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `Name` varchar(32) NOT NULL,
   `Gender` varchar(6) NOT NULL,
   `Email` varchar(32) NOT NULL,
-  `Assigned` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `Assigned` tinyint(1) NOT NULL DEFAULT '0',
+  `AccountStatus` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`IDPerson`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `tbladdpeson`
 --
 
-INSERT INTO `tbladdpeson` (`IDPerson`, `Name`, `Gender`, `Email`, `Assigned`) VALUES
-(0000000001, 'Cris', 'Male', 'cris@gmail.com', 1),
-(0000000002, 'Alivio', 'Female', 'alivio@gmail.com', 1),
-(0000000003, 'Ibyang', 'MAle', 'iby@gmail.com', 1),
-(0000000004, 'KC', 'Male', 'KC@gmail.com', 0),
-(0000000005, 'nicole', 'Female', '@gmail.com', 0),
-(0000000006, 'Louise', 'Female', 'louise@gmail.com', 0),
-(0000000007, 'qwert', 'Male', 'qwerty@gmail.com', 0);
+INSERT INTO `tbladdpeson` (`IDPerson`, `Name`, `Gender`, `Email`, `Assigned`, `AccountStatus`) VALUES
+(0000000001, 'Cris', 'Male', 'cris@gmail.com', 1, 1),
+(0000000002, 'Alivio', 'Female', 'alivio@gmail.com', 1, 0),
+(0000000003, 'Ibyang', 'MAle', 'iby@gmail.com', 1, 0),
+(0000000004, 'KC', 'Male', 'KC@gmail.com', 0, 0),
+(0000000005, 'nicole', 'Female', '@gmail.com', 0, 0),
+(0000000006, 'Louise', 'Female', 'louise@gmail.com', 0, 0),
+(0000000007, 'qwert', 'Male', 'qwerty@gmail.com', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -76,11 +90,12 @@ INSERT INTO `tbladdpeson` (`IDPerson`, `Name`, `Gender`, `Email`, `Assigned`) VA
 -- Table structure for table `tbldeletedtasks`
 --
 
-CREATE TABLE `tbldeletedtasks` (
-  `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbldeletedtasks` (
+  `TaskID` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `TaskName` varchar(32) NOT NULL,
-  `TaskSize` int(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `TaskSize` int(3) NOT NULL,
+  PRIMARY KEY (`TaskID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -88,9 +103,9 @@ CREATE TABLE `tbldeletedtasks` (
 -- Table structure for table `tbltaskmember`
 --
 
-CREATE TABLE `tbltaskmember` (
-  `PersonID` int(10) UNSIGNED ZEROFILL NOT NULL,
-  `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbltaskmember` (
+  `PersonID` int(10) unsigned zerofill NOT NULL,
+  `TaskID` int(10) unsigned zerofill NOT NULL,
   `Name` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -106,9 +121,11 @@ INSERT INTO `tbltaskmember` (`PersonID`, `TaskID`, `Name`) VALUES
 --
 -- Triggers `tbltaskmember`
 --
-DELIMITER $$
-CREATE TRIGGER `New` AFTER INSERT ON `tbltaskmember` FOR EACH ROW UPDATE tbladdpeson SET tbladdpeson.Assigned=1 WHERE tbladdpeson.IDPerson=New.PersonID
-$$
+DROP TRIGGER IF EXISTS `New`;
+DELIMITER //
+CREATE TRIGGER `New` AFTER INSERT ON `tbltaskmember`
+ FOR EACH ROW UPDATE tbladdpeson SET tbladdpeson.Assigned=1 WHERE tbladdpeson.IDPerson=New.PersonID
+//
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -117,11 +134,12 @@ DELIMITER ;
 -- Table structure for table `tbltasks`
 --
 
-CREATE TABLE `tbltasks` (
-  `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbltasks` (
+  `TaskID` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `TaskName` varchar(32) NOT NULL,
-  `TaskSize` int(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `TaskSize` int(3) NOT NULL,
+  PRIMARY KEY (`TaskID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `tbltasks`
@@ -139,74 +157,12 @@ INSERT INTO `tbltasks` (`TaskID`, `TaskName`, `TaskSize`) VALUES
 -- Table structure for table `tblusertype`
 --
 
-CREATE TABLE `tblusertype` (
-  `IDUsertype` int(10) UNSIGNED ZEROFILL NOT NULL,
-  `UserType` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `tblusertype` (
+  `IDUsertype` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `UserType` varchar(10) NOT NULL,
+  PRIMARY KEY (`IDUsertype`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `tblaccount`
---
-ALTER TABLE `tblaccount`
-  ADD PRIMARY KEY (`IDAccount`);
-
---
--- Indexes for table `tbladdpeson`
---
-ALTER TABLE `tbladdpeson`
-  ADD PRIMARY KEY (`IDPerson`);
-
---
--- Indexes for table `tbldeletedtasks`
---
-ALTER TABLE `tbldeletedtasks`
-  ADD PRIMARY KEY (`TaskID`);
-
---
--- Indexes for table `tbltasks`
---
-ALTER TABLE `tbltasks`
-  ADD PRIMARY KEY (`TaskID`);
-
---
--- Indexes for table `tblusertype`
---
-ALTER TABLE `tblusertype`
-  ADD PRIMARY KEY (`IDUsertype`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `tblaccount`
---
-ALTER TABLE `tblaccount`
-  MODIFY `IDAccount` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `tbladdpeson`
---
-ALTER TABLE `tbladdpeson`
-  MODIFY `IDPerson` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `tbldeletedtasks`
---
-ALTER TABLE `tbldeletedtasks`
-  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `tbltasks`
---
-ALTER TABLE `tbltasks`
-  MODIFY `TaskID` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `tblusertype`
---
-ALTER TABLE `tblusertype`
-  MODIFY `IDUsertype` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

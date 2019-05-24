@@ -75,6 +75,10 @@ public class TMSServerController {
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
                     case "addPerson": response =  addPerson(bin.readLine());
                     break;
+                    case "checkPerson": response = checkPerson(bin.readLine());
+                    break;
+                    case "getPerson": response = getPerson(bin.readLine(),writer);
+                    break;
                     case "createAccount" : response = createAccount(bin.readLine());
                     break;
                     case "InsertTask" : response = insertTask(bin.readLine());
@@ -111,6 +115,45 @@ public class TMSServerController {
         }
     }
     
+    private String checkPerson(String query){
+        String response = "OK";
+        
+        ResultSet rs = null;
+        
+        try {
+            rs = this.dbc.select(query);
+            if(rs.next()){
+                response = "Account is already existing"; 
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+    }
+    
+    private String getPerson(String query, ObjectOutputStream writer) throws IOException{
+        String response = "OK";
+        //int ID,String name, String gender, String email,boolean assigned, boolean accountStatus
+        ResultSet rs = null;
+        PersonModel personModel;
+        try {
+            rs = this.dbc.select(query);
+            if(rs.next()){
+                personModel = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"),rs.getBoolean("Assigned"), rs.getBoolean("AccountStatus"));
+                writer.writeObject(personModel);
+                writer.flush();
+            }else{
+                response = "Person not found";
+            }
+        } catch (SQLException ex) {
+            response = "SQL syntax error";
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+    }
+    
     private String createAccount(String query){
         String response = "OK";
         PersonModel personModel;
@@ -119,7 +162,7 @@ public class TMSServerController {
         try {
             rs = this.dbc.select(query);
             if(rs.next()){
-                personModel = new PersonModel(rs.getInt("IDPerson"), rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"), rs.getBoolean("Assigned"));
+                personModel = new PersonModel(rs.getInt("IDPerson"), rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"), rs.getBoolean("Assigned"),rs.getBoolean("AccountStatus"));
                 String newAccount = "Insert INTO tblaccount (PersonID, username, password, usertype) VALUES( " 
                                     + personModel.getID() + ",'user" + personModel.getName() + "','1234','2')" ;
                 System.out.println(newAccount);
@@ -277,7 +320,7 @@ public class TMSServerController {
             rs = this.dbc.select(query);
 
             while(rs.next()){
-                person = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"),Boolean.getBoolean(rs.getString("Assigned")));
+                person = new PersonModel(rs.getInt("IDPerson"),rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"),rs.getBoolean("Assigned"), rs.getBoolean("AccountStatus"));
                 personList.add(person);
             }
             writer.writeObject(personList);
