@@ -75,6 +75,8 @@ public class TMSServerController {
                     //read 2nd line from socket (contains query to execute) and load it as argument to the method to be called.
                     case "addPerson": response =  addPerson(bin.readLine());
                     break;
+                    case "createAccount" : response = createAccount(bin.readLine());
+                    break;
                     case "InsertTask" : response = insertTask(bin.readLine());
                     break;
                     case "readAccounts": response = readAccount(bin.readLine(),writer);
@@ -107,6 +109,28 @@ public class TMSServerController {
         } catch (IOException ex) {
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private String createAccount(String query){
+        String response = "OK";
+        PersonModel personModel;
+        ResultSet rs = null;
+        System.out.println(query);
+        try {
+            rs = this.dbc.select(query);
+            if(rs.next()){
+                personModel = new PersonModel(rs.getInt("IDPerson"), rs.getString("Name"), rs.getString("Gender"), rs.getString("Email"), rs.getBoolean("Assigned"));
+                String newAccount = "Insert INTO tblaccount (PersonID, username, password, usertype) VALUES( " 
+                                    + personModel.getID() + ",'user" + personModel.getName() + "','1234','2')" ;
+                System.out.println(newAccount);
+                this.dbc.insert(newAccount);
+            }
+        } catch (SQLException ex) {
+            response = "SQLException";
+            Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
     }
     
     private String viewMyTask(ObjectOutputStream writer) throws IOException{

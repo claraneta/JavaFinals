@@ -6,6 +6,7 @@
 package tms;
 
 import Model.PersonModel;
+import gui.CreateAccount;
 import gui.dashboard;
 import gui.viewPeople;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +34,9 @@ public class viewPeopleController {
     ArrayList<PersonModel> personList = new ArrayList();
     
     ObjectInputStream read;
+    
+    CreateAccount ca;
+    
     public viewPeopleController(JFrame vp, JFrame db,ArrayList personList,DefaultTableModel tbl ) throws ClassNotFoundException {
         this.model = tbl;
         this.personList = personList;
@@ -50,6 +53,16 @@ public class viewPeopleController {
             public void actionPerformed(ActionEvent e){
                 vp.dispose();
                 db.setVisible(true);
+            }
+        });
+        
+        vp.getBtncreateAccount().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String name = model.getValueAt(vp.getjTable1().getSelectedRow(), 0).toString();
+                ca = new CreateAccount();
+                vp.setVisible(false);
+                createAccountController cac = new createAccountController(vp,name,ca);
             }
         });
     }

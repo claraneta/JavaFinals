@@ -42,34 +42,24 @@ public class createAccountController {
         ca.getBtncreate().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if(ca.getTfusername().getText().equals("") && ca.getPfpass().getText().equals("")){
-                    JOptionPane.showMessageDialog(null, "Please populate all fields");
-                }else{
-                    try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000 ) ){
-                        try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            writer.println("createAccount");
-                            writer.println("Select * from tbladdpeson where Name = " + personName);
+                try(Socket socket = new Socket(InetAddress.getByName("localhost"),4000 ) ){
+                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        writer.println("createAccount");
+                        writer.println("Select * from tbladdpeson where Name = '" + personName + "'");
 
-                            String response = reader.readLine();
-
-//                            if(response.equals("OK")){
-//                                Object[] arr = new Object[3];
-//                                for(int x = 0; x < personList.size(); x++){
-//                                    //arr[0] = personList.get(x).getID();
-//                                    arr[0] = personList.get(x).getName();
-//                                    arr[1] = personList.get(x).getGender();
-//                                    arr[2] = personList.get(x).getEmail();
-//                                    model.addRow(arr);
-//                                }
-//                            }else{
-//                                JOptionPane.showMessageDialog(null, response);
-//                            }
+                        String response = reader.readLine();
+    
+                        if(response.contains("OK")){
+                            JOptionPane.showMessageDialog(null, "Successfully created account");
+                        }else{
+                            JOptionPane.showMessageDialog(null, response);
                         }
-                    }catch(IOException ex){
-                        System.out.println("Di mao");
                     }
+                }catch(IOException ex){
+                    System.out.println("Di mao");
                 }
+                
             }
         });
     }
