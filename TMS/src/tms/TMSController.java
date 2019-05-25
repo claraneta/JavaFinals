@@ -131,13 +131,16 @@ public class TMSController {
                             
 
                         } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(TMSController.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("Error " + ex);
                         }
                     }
                     
                     
                 } catch (IOException ex) {
                     System.out.println(ex);
+                    JOptionPane.showMessageDialog(null, "Account not found");
+                    su.getTfusername().setText("");
+                    su.getPfpass().setText("");
                 }  
 
             }

@@ -131,7 +131,7 @@ public class assignTaskController {
                         memberList.add(membermodel);
 
                     }
-
+                    String taskStatus= "";
                     for(int x = 0; x< memberList.size(); x++){
                         String personID = Integer.toString(memberList.get(x).getPersonID());
                         String TaskID = Integer.toString(memberList.get(x).getTaskID());
@@ -144,12 +144,18 @@ public class assignTaskController {
                                 + TaskID + " ',' " + pname + " ')");
                                 System.out.println("Client pushed the command and query to the server");
                                 serverResponse = reader.readLine();
-                                updateTaskStatus(taskname);
+                                taskStatus = updateTaskStatus(taskname);
                         }
                         }catch(IOException ex){
 
                         }
                         
+                    }
+                    
+                    if(taskStatus.contains("OK")){
+                        JOptionPane.showMessageDialog(null, "Task is now close for new member/s");
+                    }else{
+                        JOptionPane.showMessageDialog(null, taskStatus);
                     }
 
                     if(serverResponse.contains("OK")){
@@ -176,7 +182,8 @@ public class assignTaskController {
         });
     }
     
-    private void updateTaskStatus(String name){
+    private String updateTaskStatus(String name){
+        String serverResponse = "";
         try(Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)){
             try(PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -184,17 +191,18 @@ public class assignTaskController {
                 writer.println("Update tbltasks set TaskStatus = 1 where TaskName = '" + name + "'");
                 System.out.println("Update tbltasks set TaskStatus = 1 where TaskName = '" + name + "'");
                 
-                String serverResponse = reader.readLine();
+                serverResponse = reader.readLine();
                 
-                if(serverResponse.contains("OK")){
-                    JOptionPane.showMessageDialog(null,"Task is now close for new Members(s) !");
-                }else{
-                    JOptionPane.showMessageDialog(null, serverResponse);
-                }
+//                if(serverResponse.contains("OK")){
+//                    JOptionPane.showMessageDialog(null,"Task is now close for new Members(s) !");
+//                }else{
+//                    JOptionPane.showMessageDialog(null, serverResponse);
+//                }
             }
         }catch(IOException ex){
             
         }
+        return serverResponse;
     }
     
     private int taskID(String name){

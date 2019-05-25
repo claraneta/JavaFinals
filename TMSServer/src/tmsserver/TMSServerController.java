@@ -265,17 +265,16 @@ public class TMSServerController {
     private String readAccount(String query, ObjectOutputStream writer) throws IOException {
         String response = "OK";
         ResultSet rs = null;
+        AccountModel accountModel;
         try {
             rs = dbc.select(query);
             //this.accountsList = am.populateAccounts(rs);
             if(!rs.next()){
                 response = "Account Not found";
             }else{
-                am = new AccountModel(rs.getInt("IDAccount"), rs.getInt("PersonID"), rs.getString("username"), rs.getString("password"), rs.getInt("usertype"));
-                writer.writeObject(am);
+                accountModel = new AccountModel(rs.getInt("IDAccount"), rs.getInt("PersonID"), rs.getString("username"), rs.getString("password"), rs.getInt("usertype"));
+                writer.writeObject(accountModel);
                 writer.flush();
-//                bon.write(Integer.toString(rs.getInt("usertype")) + "\n" + rs.getString("username") + "\n");
-//                bon.flush();
             }
         } catch (SQLException ex) {
             response = "Account not found";
