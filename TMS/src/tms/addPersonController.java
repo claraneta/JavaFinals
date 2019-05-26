@@ -48,32 +48,40 @@ public class addPersonController {
             @Override
             public void actionPerformed(ActionEvent e){
                 
-                try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
-                    try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
-                        writer.println("addPerson");
-                        writer.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
-                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "',false)");
-//                        System.out.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
-//                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False');");
-     
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String responseFromServer = reader.readLine();
-                        
-                        System.out.println("Server Response : " + responseFromServer);
-                        
-                        if(responseFromServer.contains("OK")){
-                            responseFromServer = "OK";
-                        }
-                        
-                        switch(responseFromServer){
-                            case "OK" : JOptionPane.showMessageDialog(null, "Successfully added");clearText(); break;
-                            default: JOptionPane.showMessageDialog(null, responseFromServer);                    
-                        }
-                        
-                    }                   
-                } catch (IOException ex) {
-                    System.out.println(ex);
+                if(ap.getTfemail().getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Please populate all fields");
+                }else if(ap.getTfname().getText().equals("") ){
+                    JOptionPane.showMessageDialog(null,"Please populate all fields");
+                }else{
+                    try (Socket socket = new Socket(InetAddress.getByName("localhost"), 4000)) {
+                        try(PrintWriter writer = new PrintWriter(socket.getOutputStream() , true)){
+                            writer.println("addPerson");
+                            writer.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
+                            + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "',false)");
+    //                        System.out.println("Insert into tbladdpeson (Name, Gender, Email, Assigned) VALUES ( '" + ap.getTfname().getText() + "','"
+    //                        + ap.getCmbgender().getSelectedItem().toString() + "','" + ap.getTfemail().getText() + "','False');");
+
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            String responseFromServer = reader.readLine();
+
+                            System.out.println("Server Response : " + responseFromServer);
+
+                            if(responseFromServer.contains("OK")){
+                                responseFromServer = "OK";
+                            }
+
+                            switch(responseFromServer){
+                                case "OK" : JOptionPane.showMessageDialog(null, "Successfully added");clearText(); break;
+                                default: JOptionPane.showMessageDialog(null, responseFromServer);                    
+                            }
+
+                        }                   
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
                 }
+                
+                
             }
         });
     }

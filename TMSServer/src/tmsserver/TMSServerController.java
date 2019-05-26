@@ -127,6 +127,7 @@ public class TMSServerController {
         try {
             this.dbc.update(query);
         } catch (SQLException ex) {
+            response = "SQLException";
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -140,6 +141,7 @@ public class TMSServerController {
             writer.writeObject(am);
             writer.flush();
         } catch (IOException ex) {
+            response = "IOException";
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -168,6 +170,7 @@ public class TMSServerController {
                 response = "Account is already existing"; 
             }
         } catch (SQLException ex) {
+            response = "SQLException";
             Logger.getLogger(TMSServerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -226,8 +229,9 @@ public class TMSServerController {
         TaskModel taskModel;
         
         Hashtable<String, String> ht = new Hashtable<String,String>();
-        
+        System.out.println(am);
         String query = "Select * from tbltaskmember where PersonID = " + am.getPersonID();
+        
         String myTask;
         
         try {
@@ -273,6 +277,7 @@ public class TMSServerController {
                 response = "Account Not found";
             }else{
                 accountModel = new AccountModel(rs.getInt("IDAccount"), rs.getInt("PersonID"), rs.getString("username"), rs.getString("password"), rs.getInt("usertype"));
+                am = new AccountModel(rs.getInt("IDAccount"), rs.getInt("PersonID"), rs.getString("username"), rs.getString("password"), rs.getInt("usertype"));
                 writer.writeObject(accountModel);
                 writer.flush();
             }
